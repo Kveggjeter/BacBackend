@@ -1,0 +1,12 @@
+[
+  {
+    "x": 48.8566,
+    "y": 2.3522,
+    "html": "<div class='popup'> <span class='title'>Dette er den viktige tittelen</span> <span class='article'>Dette er en popup med ekte HTML!</span> <a class='link'>Trykk her hvis du er et kjøtthue</a> <img class='articleImg' alt='Image' src='https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQZIve1GrybvY5op9YiS83nN2S3MpV1wP2AtW7Ggs3FvW0vMHLm8rID0IZU7xiS0z8L4BGjUm2DbEAkvlttUSOSig' /> </div>"
+  },
+  {
+    "x": 48,
+    "y": 2,
+    "html": "<div class='popup'> <span class='title'>Hør etter, alle sammen</span> <span class='article'>Before we can use JSON in our developing projects, I think it’s necessary to understand the structure of a JSON document or JSON object. Most of the time, I use the terms JSON object and JSON document interchangeably. I think of a document when I read data from a JSON file (stored with the suffix JSON) or the result of a request against a REST API endpoint. I think of a JSON object when I think about the document's structure while reading or writing from or to the document.</span> <a class='link'>Trykk her hvis du er et kjøtthue</a> <img class='articleImg' alt='Image' src='https://gfx.nrk.no/I_VULmIIDrFF7VUMB-NcygEvaN5pNTefdAgckZtRJOpw' /> </div>"
+  }
+]

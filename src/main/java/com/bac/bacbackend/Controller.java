@@ -1,42 +1,44 @@
 package com.bac.bacbackend;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class Controller {
 
     @GetMapping("/location")
-    public LocationResponse getLocation() {
+    public List<LocationResponse> getLocations() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        return new LocationResponse(48.8566, 2.3522);
+        File file = Paths.get("src/main/java/com/bac/bacbackend/repository/Markers.JSON").toFile();
+
+        return objectMapper.readValue(file, new TypeReference<>() {});
     }
 
     public static class LocationResponse {
-        private double locationX;
-        private double locationY;
+        private double x;
+        private double y;
+        private String html;
 
-        public LocationResponse(double locationX, double locationY) {
-            this.locationX = locationX;
-            this.locationY = locationY;
-        }
+        public LocationResponse() {}
 
-        public double getLocationX() {
-            return locationX;
-        }
+        public double getX() { return x; }
+        public void setX(double x) { this.x = x; }
 
-        public void setLocationX(double locationX) {
-            this.locationX = locationX;
-        }
+        public double getY() { return y; }
+        public void setY(double y) { this.y = y; }
 
-        public double getLocationY() {
-            return locationY;
-        }
-
-        public void setLocationY(double locationY) {
-            this.locationY = locationY;
-        }
+        public String getHtml() { return html; }
+        public void setHtml(String html) { this.html = html; }
     }
 }
