@@ -1,4 +1,4 @@
-package com.bac.bacbackend.datasource;
+package com.bac.bacbackend.data.datasource.scraperUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

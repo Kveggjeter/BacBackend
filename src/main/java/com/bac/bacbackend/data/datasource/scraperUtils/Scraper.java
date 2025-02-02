@@ -1,4 +1,4 @@
-package com.bac.bacbackend.datasource;
+package com.bac.bacbackend.data.datasource.scraperUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,11 +10,11 @@ import java.io.IOException;
 public class Scraper {
 
     public void scrape() {
-        String url = "https://www.nettavisen.no/nyheter/uklart-nar-trumps-tollplaner-settes-ut-i-livet/s/5-95-2266563";
+        String url = "https://www.reuters.com/business/trump-stretches-trade-law-boundaries-with-canada-mexico-china-tariffs-2025-02-02/";
 
         try {
             Document document = Jsoup.connect(url).get();
-            Elements article = document.select(".nettavisen-theme");
+            Elements article = document.select("main");
 
             for (Element ac: article) {
                 String title = ac.select("h1").text();
