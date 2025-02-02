@@ -1,72 +1,57 @@
 package com.bac.bacbackend.datasource;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.io.IOException;
+public class WebCrawler {
+    private static final List<String> articleUrls = new ArrayList<>();
+    private static int index = 0;
 
-public class WebCrawler implements Runnable {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\sundb\\WebstormProjects\\BacBackend\\chromedriver.exe");
 
-    private Thread thread;
-    private String first_link;
-    private int ID;
+        List<String> latestArticles = crawler(new ChromeDriver());
 
-    public WebCrawler(String link, int num) {
-        System.out.println("WebCrawler created");
-        first_link = link;
-        ID = num;
-
-        thread = new Thread(this);
-        thread.start();
-    }
-
-    @Override
-    public void run() {
-        crawl(first_link);
-    }
-
-    private void crawl(String url) {
-        Document doc = request(url);
-
-        if (doc != null) {
-
-            Element firstLink = doc.selectFirst("article a");
-
-            if (firstLink != null) {
-                String nextLink = firstLink.absUrl("href");
-
-                if (!nextLink.isEmpty()) {
-                    System.out.println("Fant siste artikkel: " + nextLink);
-                } else {
-                    System.out.println("Ingen gyldig lenke funnet.");
-                }
-            } else {
-                System.out.println("Ingen lenke funnet i .contents-wrapper.");
-            }
+        System.out.println("\n 18 artikler hentet:");
+        for (String url : latestArticles) {
+            System.out.println(url);
         }
     }
 
-
-    private Document request(String url) {
+    public static List<String> crawler(WebDriver driver) {
+        if (articleUrls.size() >= 18) {
+            driver.quit();
+            return articleUrls;
+        }
+        driver.get("https://www.reuters.com/world/");
         try {
-            Connection con = Jsoup.connect(url);
-            Document doc = con.get();
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-            if (con.response().statusCode() == 200) {
-                System.out.println("\n**Bot ID:" + ID + " Received webpage at " + url);
-                System.out.println("Tittel: " + doc.title());
+            List<WebElement> articles = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".story-card a")));
 
-                return doc;
+            if (index < articles.size()) {
+                String articleUrl = articles.get(index).getAttribute("href");
+
+                if (!articleUrls.contains(articleUrl)) {
+                    articleUrls.add(articleUrl);
+                    System.out.println("Hentet artikkel #" + articleUrls.size() + ": " + articleUrl);
+                }
+
+                index++;
+                return crawler(driver);
             }
-            return null;
-        } catch (IOException e) {
-            return null;
-        }
-    }
 
-    public Thread getThread() {
-        return thread;
+        } catch (Exception e) {
+            System.out.println("Feil ved scraping: " + e.getMessage());
+        }
+
+        return articleUrls;
     }
 }
