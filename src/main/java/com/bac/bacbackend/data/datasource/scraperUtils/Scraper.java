@@ -1,30 +1,45 @@
 package com.bac.bacbackend.data.datasource.scraperUtils;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.io.IOException;
+public class Scraper implements Runnable {
+    private static final String driverPath = "C:\\Users\\sundb\\WebstormProjects\\BacBackend\\chromedriver.exe";
+    private final String url;
 
-public class Scraper {
+    static {
+        System.setProperty("webdriver.chrome.driver", driverPath);
+    }
 
-    public void scrape() {
-        String url = "https://www.reuters.com/business/trump-stretches-trade-law-boundaries-with-canada-mexico-china-tariffs-2025-02-02/";
+    public Scraper(String url) {
+        this.url = url;
+    }
 
+    @Override
+    public void run() {
+        String threadName = Thread.currentThread().getName();
+        scrape(threadName);
+    }
+
+    private void scrape(String threadName) {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
+
+        WebDriver driver = new ChromeDriver(options);
         try {
-            Document document = Jsoup.connect(url).get();
-            Elements article = document.select("main");
-
-            for (Element ac: article) {
-                String title = ac.select("h1").text();
-
-                System.out.println(title + " ");
-            }
-
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            System.out.println("[" + threadName + "] Henter data fra: " + url);
+            driver.get(url);
+            WebElement titleElement = driver.findElement(By.cssSelector("h1"));
+            String title = titleElement.getText();
+            System.out.println("[" + threadName + "] Artikkel-tittel: " + title);
+        } catch (Exception e) {
+            System.err.println("[" + threadName + "] Feil ved scraping av " + url + ": " + e.getMessage());
+        } finally {
+            driver.quit();
         }
     }
 }
