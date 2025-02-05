@@ -8,6 +8,8 @@ import java.util.List;
 
 public class WebCrawler {
     private final List<String> articleUrls = new ArrayList<>();
+    private final String container = "h3 a";
+    private final String href = "href";
 
     public List<String> startCrawling(int maxArticles, String url) {
 
@@ -28,10 +30,10 @@ public class WebCrawler {
         }
 
         try {
-            List<WebElement> articles = driver.findElements(By.cssSelector("h3 a"));
+            List<WebElement> articles = driver.findElements(By.cssSelector(container));
 
             if (index < articles.size()) {
-                String articleUrl = articles.get(index).getAttribute("href");
+                String articleUrl = articles.get(index).getAttribute(href);
 
                     if (!articleUrls.contains(articleUrl)) {
                         articleUrls.add(articleUrl);

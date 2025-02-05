@@ -1,0 +1,10 @@
+cd /mnt/c/Users/sundb/WebstormProjects/BacBackend/bacBackend
+mvn spring-boot:run
+curl http://localhost:8080
+' ctrl + c '
+
+com.bac.bacbackend.data.datasource.model.Article1
+
+https://redis.io/learn/howtos/quick-start/cheat-sheet
+
+Delete = DEL
