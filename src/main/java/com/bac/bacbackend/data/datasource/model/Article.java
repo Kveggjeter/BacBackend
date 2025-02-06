@@ -2,6 +2,8 @@ package com.bac.bacbackend.data.datasource.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,10 +18,11 @@ public class Article {
     private String summary;
     private String city;
     private String imgUrl;
+    private String ldt = LocalDateTime.now().toString();
 
     public Article() {}
 
-    public Article(String id, String sourceName, String url, String title, String summary, String city, String imgUrl) {
+    public Article(String id, String sourceName, String url, String title, String summary, String city, String imgUrl, String ldt) {
         this.id = id;
         this.sourceName = sourceName;
         this.url = url;
@@ -27,6 +30,7 @@ public class Article {
         this.summary = summary;
         this.city = city;
         this.imgUrl = imgUrl;
+        this.ldt = ldt;
     }
 
     public String getId() { return id; }
@@ -49,6 +53,9 @@ public class Article {
 
     public String getImgUrl() { return imgUrl; }
     public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
+
+    public String getLdt() { return ldt; }
+    public void setLdt(String ldt) { this.ldt = ldt; }
 
     @Override
     public String toString() {

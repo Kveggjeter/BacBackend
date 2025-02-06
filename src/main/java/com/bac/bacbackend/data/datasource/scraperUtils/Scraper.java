@@ -58,17 +58,18 @@ public class Scraper implements Runnable {
             String summary = summaryElement.getText();
             String city = regex.cityName(summary);
             String sourceName = regex.urlName(url);
+            String imgLink = regex.imageSrc(imgUrl);
             System.out.println("[" + threadName + "] Article-Title: " + title);
             System.out.println("[" + threadName + "] Article-Summary: " + summary);
             System.out.println("[" + threadName + "] Article-Source: " + sourceName);
             System.out.println("[" + threadName + "] Article-City: " + city);
-            System.out.println("[" + threadName + "] Article-Image: " + imgUrl);
+            System.out.println("[" + threadName + "] Article-Image: " + imgLink);
             a.setTitle(title);
             a.setSummary(summary);
             a.setUrl(url);
             a.setSourceName(sourceName);
             a.setCity(city);
-            a.setImgUrl(imgUrl);
+            a.setImgUrl(imgLink);
 
             aRepo.save(a);
             System.out.println("[" + threadName + "] Saving the article in db with the ID: " + a.getId());
