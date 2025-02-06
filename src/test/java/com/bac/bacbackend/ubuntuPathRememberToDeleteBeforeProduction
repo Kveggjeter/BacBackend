@@ -8,3 +8,9 @@ com.bac.bacbackend.data.datasource.model.Article1
 https://redis.io/learn/howtos/quick-start/cheat-sheet
 
 Delete = DEL
+
+FLUSHALL - delete all keys
+FLUSHDB delete all keys in selected db
+
+hgetall  - get all from the key
+

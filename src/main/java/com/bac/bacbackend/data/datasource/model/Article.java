@@ -2,26 +2,30 @@ package com.bac.bacbackend.data.datasource.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-
 import java.util.Objects;
+import java.util.UUID;
 
 @RedisHash("Article")
 public class Article {
 
     @Id
-    private String id;
+    private String id = UUID.randomUUID().toString();;
     private String sourceName;
     private String url;
     private String title;
+    private String summary;
+    private String city;
     private String imgUrl;
 
     public Article() {}
 
-    public Article(String id, String sourceName, String url, String title, String imgUrl) {
+    public Article(String id, String sourceName, String url, String title, String summary, String city, String imgUrl) {
         this.id = id;
         this.sourceName = sourceName;
         this.url = url;
         this.title = title;
+        this.summary = summary;
+        this.city = city;
         this.imgUrl = imgUrl;
     }
 
@@ -37,6 +41,12 @@ public class Article {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+
     public String getImgUrl() { return imgUrl; }
     public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 
@@ -47,6 +57,8 @@ public class Article {
                 ", sourceName='" + sourceName + '\'' +
                 ", url='" + url + '\'' +
                 ", title='" + title + '\'' +
+                ", summary='" + summary + '\'' +
+                ", city='" + city + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 '}';
     }
