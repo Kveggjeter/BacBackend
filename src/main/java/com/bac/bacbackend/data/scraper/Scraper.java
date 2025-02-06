@@ -1,7 +1,8 @@
-package com.bac.bacbackend.data.datasource.scraperUtils;
+package com.bac.bacbackend.data.scraper;
 
-import com.bac.bacbackend.data.datasource.model.Article;
+import com.bac.bacbackend.domain.model.Article;
 import com.bac.bacbackend.data.repository.ArticleRepository;
+import com.bac.bacbackend.domain.util.Regex;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

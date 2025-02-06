@@ -1,6 +1,6 @@
 package com.bac.bacbackend.data.repository;
 
-import com.bac.bacbackend.data.datasource.model.Article;
+import com.bac.bacbackend.domain.model.Article;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

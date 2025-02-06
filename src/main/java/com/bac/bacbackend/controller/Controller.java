@@ -1,7 +1,7 @@
 package com.bac.bacbackend.controller;
 
-import com.bac.bacbackend.data.datasource.model.Article;
-import com.bac.bacbackend.data.datasource.scraperUtils.Bot;
+import com.bac.bacbackend.domain.model.Article;
+import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

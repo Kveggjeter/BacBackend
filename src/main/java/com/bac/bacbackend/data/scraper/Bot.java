@@ -1,4 +1,4 @@
-package com.bac.bacbackend.data.datasource.scraperUtils;
+package com.bac.bacbackend.data.scraper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

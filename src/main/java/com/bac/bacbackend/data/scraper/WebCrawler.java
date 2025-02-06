@@ -1,4 +1,4 @@
-package com.bac.bacbackend.data.datasource.scraperUtils;
+package com.bac.bacbackend.data.scraper;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

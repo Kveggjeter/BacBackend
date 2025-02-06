@@ -1,4 +1,4 @@
-package com.bac.bacbackend.data.datasource.scraperUtils;
+package com.bac.bacbackend.domain.util;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

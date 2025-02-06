@@ -1,4 +1,4 @@
-package com.bac.bacbackend.data.datasource.model;
+package com.bac.bacbackend.domain.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
