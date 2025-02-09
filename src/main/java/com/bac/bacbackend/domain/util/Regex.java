@@ -12,7 +12,6 @@ public class Regex {
     @Value("${regex.firstWord}")
     private String firstWord;
     @Value("${regex.link}")
-    private String link;
 
     public String urlName(String s) {
         Matcher mx = Pattern.compile(firstWord).matcher(s);
@@ -25,8 +24,7 @@ public class Regex {
     public String cityName(String s) {
         int comma = s.indexOf(',');
         String fp = comma != -1 ? s.substring(0, comma) : s;
-        String lp = fp.replaceAll("\\s", "");
-        String city = lp.replaceAll(alph, "");
+        String city = fp.replaceAll(alph, "");
         return city.isEmpty() ? "" : city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase();
     }
 

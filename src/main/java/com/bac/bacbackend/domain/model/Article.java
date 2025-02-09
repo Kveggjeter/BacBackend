@@ -11,9 +11,8 @@ import java.util.UUID;
 public class Article {
 
     @Id
-    private String id = UUID.randomUUID().toString();;
+    private String id;;
     private String sourceName;
-    private String url;
     private String title;
     private String summary;
     private String city;
@@ -22,10 +21,9 @@ public class Article {
 
     public Article() {}
 
-    public Article(String id, String sourceName, String url, String title, String summary, String city, String imgUrl, String ldt) {
+    public Article(String id, String sourceName, String title, String summary, String city, String imgUrl, String ldt) {
         this.id = id;
         this.sourceName = sourceName;
-        this.url = url;
         this.title = title;
         this.summary = summary;
         this.city = city;
@@ -38,9 +36,6 @@ public class Article {
 
     public String getSourceName() { return sourceName; }
     public void setSourceName(String sourceName) { this.sourceName = sourceName; }
-
-    public String getUrl() { return url; }
-    public void setUrl(String url) { this.url = url; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -62,7 +57,6 @@ public class Article {
         return "Article{" +
                 "id='" + id + '\'' +
                 ", sourceName='" + sourceName + '\'' +
-                ", url='" + url + '\'' +
                 ", title='" + title + '\'' +
                 ", summary='" + summary + '\'' +
                 ", city='" + city + '\'' +

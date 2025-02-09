@@ -36,7 +36,7 @@ public class Controller {
     public String save() {
         Article a = new Article();
         a.setSourceName("a jerk");
-        a.setUrl("www.yourmom.com");
+        a.setId("www.yourmom.com");
         a.setTitle("nice");
         a.setImgUrl("www.nty.io");
         repo.save(a);
@@ -47,6 +47,11 @@ public class Controller {
     public String start() {
         bot.start();
         return "Scraping started";
+    }
+
+    @GetMapping("/news")
+    public List<Article> getNews() {
+     return (List<Article>) repo.findAll();
     }
 
     @GetMapping("/location")
