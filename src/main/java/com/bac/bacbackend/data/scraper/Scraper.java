@@ -9,72 +9,57 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Component
-public class Scraper implements Runnable {
-    private static final int threadCount = 5;
-    private String url;
-    private String imgUrl;
+public class Scraper {
+
     private final ArticleRepository aRepo;
     private final Regex regex;
-    private final Article a = new Article();
     private final OpenAi ai;
     private final String coCity = StringResource.COCITY.getValue();
     private final String coCategory = StringResource.COCATEGORY.getValue();
+    private final String te = "h1";
+    private final String se = "div[data-testid^='paragraph-0']";
 
     @Autowired
-    private Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai) {
+    public Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai) {
         this.aRepo = aRepo;
         this.regex = regex;
         this.ai = ai;
     }
 
-    private Scraper(String url, String imgUrl, ArticleRepository aRepo, Regex regex, OpenAi ai) {
-        this.url = url;
-        this.imgUrl = imgUrl;
-        this.aRepo = aRepo;
-        this.regex = regex;
-        this.ai = ai;
-    }
-
-    public void startScraping(String url, String imgUrl) {
-        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
-        executor.submit(new Scraper(url, imgUrl, aRepo, regex, ai));
-        executor.shutdown();
-
-        try {
-            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) executor.shutdownNow();
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-        }
-    }
-
-    private void scrape(String threadName) {
+    /**
+     * Remember to remove the prints, only here for debugging.
+     */
+    public void scrape(String url, String imgUrl) {
         BrowserSettings browserSettings = new BrowserSettings();
         WebDriver driver = browserSettings.driver();
 
         try {
+            String threadName = Thread.currentThread().getName();
             System.out.println("[" + threadName + "] Fetching from " + url);
+
             driver.get(url);
-            WebElement titleElement = driver.findElement(By.cssSelector("h1"));
-            WebElement summaryElement = driver.findElement(By.cssSelector("div[data-testid^='paragraph-0']"));
-            String title = titleElement.getText();
+            WebElement titleElement = driver.findElement(By.cssSelector(te));
+            WebElement summaryElement = driver.findElement(By.cssSelector(se));
+
+            String title   = titleElement.getText();
             String summary = summaryElement.getText();
-            String city = ai.prompt(coCity, summary);
+            String city    = ai.prompt(coCity, summary);
             String category = ai.prompt(coCategory, summary);
+
             String sourceName = regex.urlName(url);
-            String imgLink = regex.imageSrc(imgUrl);
+            String imgLink    = regex.imageSrc(imgUrl);
+
             System.out.println("[" + threadName + "] Article-Title: " + title);
             System.out.println("[" + threadName + "] Article-Summary: " + summary);
             System.out.println("[" + threadName + "] Article-Source: " + sourceName);
             System.out.println("[" + threadName + "] Article-City: " + city);
             System.out.println("[" + threadName + "] Article-Image: " + imgLink);
             System.out.println("[" + threadName + "] Article-Category: " + category);
+
+            Article a = new Article();
             a.setTitle(title);
             a.setSummary(summary);
             a.setId(url);
@@ -85,15 +70,13 @@ public class Scraper implements Runnable {
 
             aRepo.save(a);
             System.out.println("[" + threadName + "] Saving the article in db with the ID: " + a.getId());
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            String threadName = Thread.currentThread().getName();
             System.err.println("[" + threadName + "] Failed to extract info from: " + url + ": " + e.getMessage());
-        } finally {
+        }
+        finally {
             driver.quit();
         }
-    }
-
-    @Override
-    public void run() {
-        scrape(Thread.currentThread().getName());
     }
 }
