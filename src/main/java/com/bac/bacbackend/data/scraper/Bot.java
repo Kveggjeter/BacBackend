@@ -17,7 +17,7 @@ public class Bot {
     }
 
     public void start () {
-        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(3, url);
+        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(10, url);
         System.out.println("Sending articles to scraper...");
 
         for (WebCrawler.ArticleData articleData : articles) {

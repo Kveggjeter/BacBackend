@@ -16,17 +16,19 @@ public class Article {
     private String title;
     private String summary;
     private String city;
+    private String category;
     private String imgUrl;
     private String ldt = LocalDateTime.now().toString();
 
     public Article() {}
 
-    public Article(String id, String sourceName, String title, String summary, String city, String imgUrl, String ldt) {
+    public Article(String id, String sourceName, String title, String summary, String city, String category, String imgUrl, String ldt) {
         this.id = id;
         this.sourceName = sourceName;
         this.title = title;
         this.summary = summary;
         this.city = city;
+        this.category = category;
         this.imgUrl = imgUrl;
         this.ldt = ldt;
     }
@@ -46,6 +48,9 @@ public class Article {
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
 
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
     public String getImgUrl() { return imgUrl; }
     public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 
@@ -60,6 +65,7 @@ public class Article {
                 ", title='" + title + '\'' +
                 ", summary='" + summary + '\'' +
                 ", city='" + city + '\'' +
+                ", category='" + category + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 '}';
     }

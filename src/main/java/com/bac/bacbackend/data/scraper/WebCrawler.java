@@ -42,12 +42,12 @@ public class WebCrawler {
                 String imgUrl = (index < imgs.size()) ? imgs.get(index).getAttribute(img) : "NO_IMAGE";
                 assert articleUrl != null;
                 if (!aRepo.existsById(articleUrl)) {
-                if (!articlesList.contains(new ArticleData(articleUrl, imgUrl))) {
-                    articlesList.add(new ArticleData(articleUrl, imgUrl));
-                    System.out.println("Fetched article #" + articlesList.size() + ": " + articleUrl);
-                    System.out.println("Fetched img #" + articlesList.size() + ": " + imgUrl);
+                    if (!articlesList.contains(new ArticleData(articleUrl, imgUrl))) {
+                        articlesList.add(new ArticleData(articleUrl, imgUrl));
+                        System.out.println("Fetched article #" + articlesList.size() + ": " + articleUrl);
+                        System.out.println("Fetched img #" + articlesList.size() + ": " + imgUrl);
+                    }
                 }
-            }
                 return crawl(driver, index + 1, maxArticles, articlesList);
             }
         } catch (Exception e) {
