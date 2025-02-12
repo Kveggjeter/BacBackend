@@ -21,12 +21,6 @@ public class Regex {
         } else return null;
     }
 
-    public String cityName(String s) {
-        int comma = s.indexOf(',');
-        String fp = comma != -1 ? s.substring(0, comma) : s;
-        String city = fp.replaceAll(alph, "");
-        return city.isEmpty() ? "" : city.substring(0, 1).toUpperCase() + city.substring(1).toLowerCase();
-    }
 
     public String imageSrc(String s) {
         Matcher mx = Pattern.compile("https?://[^\s\"']+").matcher(s);

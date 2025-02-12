@@ -11,35 +11,34 @@ import java.util.List;
 
 @Component
 public class WebCrawler {
-    private final String container = "h3 a";
-    private final String href = "href";
-    private final String imgContainer = "div[data-testid='Image']";
-    private final String img = "innerHTML";
+
     @Autowired
     private ArticleRepository aRepo;
 
-    public List<ArticleData> startCrawling(int maxArticles, String url) {
+    public List<ArticleData> startCrawling(int maxArticles, String url, String txtLocator, String txtHref, String imgLocator, String imgHref) {
         List<ArticleData> articlesList = new ArrayList<>();
         BrowserSettings browserSettings = new BrowserSettings();
         WebDriver driver = browserSettings.driver();
         driver.get(url);
-        List<ArticleData> articles = crawl(driver, 0, maxArticles, articlesList);
+        List<ArticleData> articles = crawl(driver, 0, maxArticles, articlesList, txtLocator, txtHref, imgLocator, imgHref);
         driver.quit();
         return articles;
     }
 
-    private List<ArticleData> crawl(WebDriver driver, int index, int maxArticles, List<ArticleData> articlesList) {
+    private List<ArticleData> crawl(WebDriver driver, int index, int maxArticles, List<ArticleData> articlesList, String txtLocator,
+                                    String txtHref, String imgLocator, String imgHref
+    ){
         if (articlesList.size() >= maxArticles) {
             return articlesList;
         }
 
         try {
-            List<WebElement> articles = driver.findElements(By.cssSelector(container));
-            List<WebElement> imgs = driver.findElements(By.cssSelector(imgContainer));
+            List<WebElement> articles = driver.findElements(By.cssSelector(txtLocator));
+            List<WebElement> imgs = driver.findElements(By.cssSelector(imgLocator));
 
             if (index < articles.size()) {
-                String articleUrl = articles.get(index).getAttribute(href);
-                String imgUrl = (index < imgs.size()) ? imgs.get(index).getAttribute(img) : "NO_IMAGE";
+                String articleUrl = articles.get(index).getAttribute(txtHref);
+                String imgUrl = (index < imgs.size()) ? imgs.get(index).getAttribute(imgHref) : "NO_IMAGE";
                 assert articleUrl != null;
                 if (!aRepo.existsById(articleUrl)) {
                     if (!articlesList.contains(new ArticleData(articleUrl, imgUrl))) {
@@ -48,7 +47,7 @@ public class WebCrawler {
                         System.out.println("Fetched img #" + articlesList.size() + ": " + imgUrl);
                     }
                 }
-                return crawl(driver, index + 1, maxArticles, articlesList);
+                return crawl(driver, index + 1, maxArticles, articlesList, txtLocator, txtHref, imgLocator, imgHref);
             }
         } catch (Exception e) {
             System.out.println("Error while fetching articles: " + e.getMessage());

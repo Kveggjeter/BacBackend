@@ -1,8 +1,7 @@
 package com.bac.bacbackend.domain.model;
 
 public enum StringResource {
-    COCITY("Answer with only the city you associate the text with. If no city, then state. If no state, country."),
-    COCATEGORY("Answer with only the category this text should be place in. Choose only between: Business, Crime, Culture, Politics, Science, Sports.");
+    COMMAND("Answer with one(always) city, country, region(middle-east, central-africa, midwest etc) and continent you associate the text with. Also put it in one of these categories: {Business,Crime,Culture,Politics,Science,Sports} Also give coordinates to place it in Leaflet. Send back this format: city/country/region/continent/category/x/y");
 
     private final String value;
 

@@ -4,6 +4,7 @@ import com.bac.bacbackend.data.scraper.WebCrawler;
 import com.bac.bacbackend.domain.model.Article;
 import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.ArticleRepository;
+import com.bac.bacbackend.domain.model.StringResource;
 import com.bac.bacbackend.domain.service.OpenAi;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -25,12 +27,18 @@ public class Controller {
     private final ArticleRepository repo;
     private final OpenAi ai;
     private final WebCrawler webCrawler;
-    @Value("${ai.command.city}")
-    private String coCity;
-    @Value("${ai.command.category}")
-    private String coCategory;
     @Value("${ai.summary}")
     private String coSummary;
+    private final String command = StringResource.COMMAND.getValue();
+    private final String reutersTxtLocator = "h3 a";
+    private final String reutersTxtHref = "href";
+    private final String reutersImgLocator = "div[data-testid='Image']";
+    private final String reutersImgHref = "innerHTML";
+    private final String apTxtLocator = "div.PagePromo-media a.Link[aria-label]";
+    private final String apTxtHref = "href";
+    private final String apImgLocator = apTxtLocator + " picture[data-crop]";
+    private final String apImgHref = "innerHTML";
+
 
     private Controller (Bot bot, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler) {
         this.bot = bot;
@@ -64,14 +72,19 @@ public class Controller {
 
     @RequestMapping("/ai")
     public String oai() {
-        System.out.println(ai.prompt(coCategory, coSummary));
+
+        String[] res = ai.prompt(command, coSummary).split("/");
+        String city = res[0], country = res[1], continent = res[2],
+                region = res[3], category = res[4], x = res[5], y = res[6];
+        System.out.println(Arrays.toString(res));
+        System.out.println("City: " + city + " Country: " + country + " Continent: " + continent + "Region: " + region + " Category: " + category + " X: " + x + " Y: " + y);
         return "Ai started";
     }
 
     @RequestMapping ("/crawl")
     public String crawl() {
-        String url = "https://www.reuters.com/world/";
-        webCrawler.startCrawling(1, url);
+        String url = "https://apnews.com/";
+        webCrawler.startCrawling(10, url, apTxtLocator, apTxtHref, apImgLocator, apImgHref);
         return "Crawling started";
     }
 

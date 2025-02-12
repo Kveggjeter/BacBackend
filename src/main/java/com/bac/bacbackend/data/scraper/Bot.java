@@ -8,11 +8,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class Bot {
+public class Bot extends StringBank {
     private final WebCrawler webCrawler;
     private final Scraper scraper;
-    private static final String url = "https://www.reuters.com/world/";
-    private final int threadNumber = 5;
+    private final int threadNumber = 10;
     private final int maxArticles = 10;
 
     @Autowired
@@ -22,19 +21,19 @@ public class Bot {
     }
 
     public void start() {
-        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(maxArticles, url);
+        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(maxArticles, apUrl, apTxtLocator, apTxtHref, apImgLocator, apImgHref);
         System.out.println("Sending articles to scraper...");
         ExecutorService executorService = Executors.newFixedThreadPool(threadNumber);
 
         for (WebCrawler.ArticleData articleData : articles) {
             executorService.submit(() -> {
-                scraper.scrape(articleData.articleUrl(), articleData.imgUrl());
+                scraper.scrape(articleData.articleUrl(), articleData.imgUrl(), apTitle, apSum);
             });
         }
 
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(30, TimeUnit.SECONDS)) {
+            if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
         }
