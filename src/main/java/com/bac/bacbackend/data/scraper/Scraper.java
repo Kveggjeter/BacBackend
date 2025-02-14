@@ -40,6 +40,15 @@ public class Scraper {
             String title = getElementText(driver, titleHeader);
             String summary = getElementText(driver, sumBody);;
 
+            if (summary == null) {
+                System.out.println("No summary found");
+                return;
+            }
+            if (summary.length() > 400) summary = summary.substring(0, 400) + "...";
+
+            System.out.println("summary: " + summary);
+            System.out.println("title: " + title);
+
             String[] res = ai.prompt(command, summary).split("/");
             if (res.length < 7) {
                 System.err.println("Prompt gone wrong, expected 7 output but only got: " + res.length);
@@ -51,7 +60,12 @@ public class Scraper {
                     continent = res[3], category = res[4], x = res[5], y = res[6];
 
             String sourceName = regex.urlName(url);
-            String imgLink    = regex.imageSrc(imgUrl);
+            String imgLink = regex.imageSrc(imgUrl);
+            if (imgLink == null) {
+                WebElement redoImg = driver.findElement(By.cssSelector("img"));
+                String resImg = redoImg.getAttribute("src");
+                imgLink = regex.imageSrc(resImg);
+            }
 
             System.out.println("[" + threadName + "] Article-Title: " + title);
             System.out.println("[" + threadName + "] Article-Summary: " + summary);
@@ -87,7 +101,6 @@ public class Scraper {
             System.err.println("[" + threadName + "] Failed to extract info from: " + url + ": " + e.getMessage());
         }
         finally {
-            driver.close();
             driver.quit();
         }
     }

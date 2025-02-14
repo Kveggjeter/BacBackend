@@ -26,6 +26,7 @@ public class Regex {
         Matcher mx = Pattern.compile("https?://[^\s\"']+").matcher(s);
         String lm = null;
         while (mx.find()) lm = mx.group();
+        if (lm == null) return null;
         return lm.replace(";", "").replace("amp", "");
     }
 

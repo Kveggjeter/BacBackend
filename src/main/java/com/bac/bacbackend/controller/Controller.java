@@ -30,14 +30,15 @@ public class Controller {
     @Value("${ai.summary}")
     private String coSummary;
     private final String command = StringResource.COMMAND.getValue();
-    private final String reutersTxtLocator = "h3 a";
-    private final String reutersTxtHref = "href";
-    private final String reutersImgLocator = "div[data-testid='Image']";
-    private final String reutersImgHref = "innerHTML";
-    private final String apTxtLocator = "div.PagePromo-media a.Link[aria-label]";
-    private final String apTxtHref = "href";
-    private final String apImgLocator = apTxtLocator + " picture[data-crop]";
-    private final String apImgHref = "innerHTML";
+    protected static final String anUrl = "https://asianews.network/category/home-page/daily-digest/";
+    protected final String anTxtLocator = "div.post-img a";
+    protected final String anTxtHref = "href";
+    protected final String anImgLocator = anTxtLocator + " img";
+    protected final String anImgHref = "src";
+    protected final String anTitle = "h1";
+    protected final String anSum = "div.article__summary";
+
+
 
 
     private Controller (Bot bot, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler) {
@@ -83,8 +84,7 @@ public class Controller {
 
     @RequestMapping ("/crawl")
     public String crawl() {
-        String url = "https://apnews.com/";
-        webCrawler.startCrawling(10, url, apTxtLocator, apTxtHref, apImgLocator, apImgHref);
+        webCrawler.startCrawling(10, anUrl, anTxtLocator, anTxtHref, anImgLocator, anImgHref);
         return "Crawling started";
     }
 

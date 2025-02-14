@@ -19,9 +19,11 @@ public class WebCrawler {
         List<ArticleData> articlesList = new ArrayList<>();
         BrowserSettings browserSettings = new BrowserSettings();
         WebDriver driver = browserSettings.driver();
+        System.out.println("Crawling the webpage, please wait...");
         driver.get(url);
         List<ArticleData> articles = crawl(driver, 0, maxArticles, articlesList, txtLocator, txtHref, imgLocator, imgHref);
         driver.quit();
+        System.out.println("Crawling finished");
         return articles;
     }
 

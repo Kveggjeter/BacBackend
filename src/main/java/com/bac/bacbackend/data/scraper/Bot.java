@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class Bot extends StringBank {
     private final WebCrawler webCrawler;
     private final Scraper scraper;
-    private final int threadNumber = 10;
-    private final int maxArticles = 10;
+    private final int threadNumber = 1;
+    private final int maxArticles = 1;
 
     @Autowired
     public Bot(WebCrawler webCrawler, Scraper scraper) {
@@ -21,13 +21,13 @@ public class Bot extends StringBank {
     }
 
     public void start() {
-        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(maxArticles, apUrl, apTxtLocator, apTxtHref, apImgLocator, apImgHref);
+        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(maxArticles, anUrl, anTxtLocator, anTxtHref, anImgLocator, anImgHref);
         System.out.println("Sending articles to scraper...");
         ExecutorService executorService = Executors.newFixedThreadPool(threadNumber);
 
         for (WebCrawler.ArticleData articleData : articles) {
             executorService.submit(() -> {
-                scraper.scrape(articleData.articleUrl(), articleData.imgUrl(), apTitle, apSum);
+                scraper.scrape(articleData.articleUrl(), articleData.imgUrl(), anTitle, anSum);
             });
         }
 
