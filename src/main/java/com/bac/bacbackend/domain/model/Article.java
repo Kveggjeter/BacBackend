@@ -1,11 +1,23 @@
 package com.bac.bacbackend.domain.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@RedisHash("Article")
+/**
+ *
+ * Getter/setter source: https://www.baeldung.com/lombok-omit-getter-setter
+ *
+ * 24h = 86400
+ * 48h = 172800
+ * 72h = 259200
+ */
+@Setter
+@Getter
+@RedisHash(value = "Article", timeToLive = 172800)
 public class Article {
 
     @Id
@@ -43,45 +55,6 @@ public class Article {
         this.imgUrl = imgUrl;
         this.ldt = ldt;
     }
-
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public String getSourceName() { return sourceName; }
-    public void setSourceName(String sourceName) { this.sourceName = sourceName; }
-
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getSummary() { return summary; }
-    public void setSummary(String summary) { this.summary = summary; }
-
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
-
-    public String getRegion() { return region; }
-    public void setRegion(String region) { this.region = region; }
-
-    public String getContinent() { return continent; }
-    public void setContinent(String continent) { this.continent = continent; }
-
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-
-    public String getX() { return x; }
-    public void setX(String x) { this.x = x; }
-
-    public String getY() { return y; }
-    public void setY(String y) { this.y = y; }
-
-    public String getImgUrl() { return imgUrl; }
-    public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
-
-    public String getLdt() { return ldt; }
-    public void setLdt(String ldt) { this.ldt = ldt; }
 
     @Override
     public String toString() {

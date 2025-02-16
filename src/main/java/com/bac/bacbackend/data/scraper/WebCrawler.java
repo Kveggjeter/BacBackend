@@ -23,7 +23,24 @@ public class WebCrawler {
         driver.get(url);
         List<ArticleData> articles = crawl(driver, 0, maxArticles, articlesList, txtLocator, txtHref, imgLocator, imgHref);
         driver.quit();
-        System.out.println("Crawling finished");
+
+        // TODO: Rotating IP
+//        if (articles.isEmpty()) {
+//            System.out.println("No articles returned, trying again..");
+//            driver.quit();
+//            try {
+//                BrowserSettings secondSettings = new BrowserSettings();
+//                WebDriver secondDriver = secondSettings.driver();
+//                secondDriver.get(url);
+//                Thread.sleep(3000);
+//                crawl(secondDriver, 0, maxArticles, articlesList, txtLocator, txtHref, imgLocator, imgHref);
+//                secondDriver.quit();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        } else driver.quit();
+        int count = articlesList.size();
+        System.out.println("Crawling finished. Managed to get " + count + " articles out of " + maxArticles + ".");
         return articles;
     }
 

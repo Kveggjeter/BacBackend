@@ -1,21 +1,17 @@
 package com.bac.bacbackend.controller;
 
+import com.bac.bacbackend.data.scraper.StringBank;
 import com.bac.bacbackend.data.scraper.WebCrawler;
 import com.bac.bacbackend.domain.model.Article;
 import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.bac.bacbackend.domain.model.StringResource;
 import com.bac.bacbackend.domain.service.OpenAi;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,27 +21,26 @@ public class Controller {
 
     private final Bot bot;
     private final ArticleRepository repo;
+    private final StringBank sb;
     private final OpenAi ai;
     private final WebCrawler webCrawler;
     @Value("${ai.summary}")
     private String coSummary;
     private final String command = StringResource.COMMAND.getValue();
-    protected static final String anUrl = "https://asianews.network/category/home-page/daily-digest/";
-    protected final String anTxtLocator = "div.post-img a";
-    protected final String anTxtHref = "href";
-    protected final String anImgLocator = anTxtLocator + " img";
-    protected final String anImgHref = "src";
-    protected final String anTitle = "h1";
-    protected final String anSum = "div.article__summary";
+    protected static final String skyUrl = "https://www.skynews.com.au/australia-news";
+    protected final String skyTxtLocator = "h4 a";
+    protected final String skyTxtHref = "href";
+    protected final String skyImgLocator = "div.responsive-img";
+    protected final String skyImgHref = "innerHTML";
+    protected final String skyTitle = "h1";
+    protected final String skySum = "div.article-content";
 
-
-
-
-    private Controller (Bot bot, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler) {
+    private Controller (Bot bot, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler, StringBank sb) {
         this.bot = bot;
         this.repo = repo;
         this.ai = ai;
         this.webCrawler = webCrawler;
+        this.sb = sb;
     }
 
     @RequestMapping("/")
@@ -58,7 +53,7 @@ public class Controller {
     public String save() {
         Article a = new Article();
         a.setSourceName("a jerk");
-        a.setId("www.yourmom.com");
+        a.setId("www.yourmomlllll.com");
         a.setTitle("nice");
         a.setImgUrl("www.nty.io");
         repo.save(a);
@@ -67,7 +62,8 @@ public class Controller {
 
     @RequestMapping("/start")
     public String start() {
-        bot.start();
+        int n = sb.getUrl().size() - 1;
+        bot.start(n);
         return "Scraping started";
     }
 
@@ -84,7 +80,7 @@ public class Controller {
 
     @RequestMapping ("/crawl")
     public String crawl() {
-        webCrawler.startCrawling(10, anUrl, anTxtLocator, anTxtHref, anImgLocator, anImgHref);
+        webCrawler.startCrawling(5, skyUrl, skyTxtLocator, skyTxtHref, skyImgLocator, skyImgHref);
         return "Crawling started";
     }
 
@@ -94,29 +90,10 @@ public class Controller {
      return (List<Article>) repo.findAll();
     }
 
-    @GetMapping("/location")
-    public List<LocationResponse> getLocations() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        File file = Paths.get("src/main/java/com/bac/bacbackend/repository/Markers.JSON").toFile();
-
-        return objectMapper.readValue(file, new TypeReference<>() {});
+    @GetMapping("/single")
+    public String startSingle() {
+        bot.startSingle();
+        return "Single started";
     }
 
-    public static class LocationResponse {
-        private double x;
-        private double y;
-        private String html;
-
-        public LocationResponse() {}
-
-        public double getX() { return x; }
-        public void setX(double x) { this.x = x; }
-
-        public double getY() { return y; }
-        public void setY(double y) { this.y = y; }
-
-        public String getHtml() { return html; }
-        public void setHtml(String html) { this.html = html; }
-    }
 }

@@ -17,6 +17,7 @@ public class Scraper {
     private final Regex regex;
     private final OpenAi ai;
     private final String command = StringResource.COMMAND.getValue();
+    private static final ThreadLocal<WebDriver> localDriver = new ThreadLocal<>();
 
     @Autowired
     public Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai) {
@@ -31,53 +32,55 @@ public class Scraper {
     public void scrape(String url, String imgUrl, String titleHeader, String sumBody) {
         BrowserSettings browserSettings = new BrowserSettings();
         WebDriver driver = browserSettings.driver();
+        localDriver.set(driver);
 
         try {
             String threadName = Thread.currentThread().getName();
             System.out.println("[" + threadName + "] Fetching from " + url);
-
             driver.get(url);
-            String title = getElementText(driver, titleHeader);
-            String summary = getElementText(driver, sumBody);;
 
-            if (summary == null) {
-                System.out.println("No summary found");
+            if (Thread.currentThread().isInterrupted()) {
+                System.err.println("[" + threadName + "] failed fetching from " + url);
+                driver.close();
+                driver.quit();
                 return;
             }
+
+            String title = getElementText(driver, titleHeader);
+            String summary = getElementText(driver, sumBody);;
+            System.out.println("[" + threadName + "] summary: " + summary);
+
+            if (summary == null) {
+                summary = getElementText(driver, "p");
+                if (summary == null) {
+                    System.err.println("[" + threadName + "] No summary found");
+                }
+                return;
+            }
+
             if (summary.length() > 400) summary = summary.substring(0, 400) + "...";
 
             System.out.println("summary: " + summary);
             System.out.println("title: " + title);
 
-            String[] res = ai.prompt(command, summary).split("/");
-            if (res.length < 7) {
-                System.err.println("Prompt gone wrong, expected 7 output but only got: " + res.length);
+            String[] res = ai.prompt(command, title + " " + summary).split("/");
+            if (!(res.length == 6)) {
+                System.err.println("[" + threadName + "] " + "Prompt gone wrong, expected 6 output but only got: " + res.length);
                 System.err.println(ai.prompt(command, summary));
                 return;
             }
 
-            String city = res[0], country = res[1], region = res[2],
-                    continent = res[3], category = res[4], x = res[5], y = res[6];
+            String city = res[0], country = res[1], continent = res[2],
+                    category = res[3], x = res[4], y = res[5];
 
             String sourceName = regex.urlName(url);
             String imgLink = regex.imageSrc(imgUrl);
+
             if (imgLink == null) {
                 WebElement redoImg = driver.findElement(By.cssSelector("img"));
                 String resImg = redoImg.getAttribute("src");
                 imgLink = regex.imageSrc(resImg);
             }
-
-            System.out.println("[" + threadName + "] Article-Title: " + title);
-            System.out.println("[" + threadName + "] Article-Summary: " + summary);
-            System.out.println("[" + threadName + "] Article-Source: " + sourceName);
-            System.out.println("[" + threadName + "] Article-City: " + city);
-            System.out.println("[" + threadName + "] Article-Country: " + country);
-            System.out.println("[" + threadName + "] Article-Continent: " + continent);
-            System.out.println("[" + threadName + "] Article-Region: " + region);
-            System.out.println("[" + threadName + "] Article-x: " + x);
-            System.out.println("[" + threadName + "] Article-y: " + y);
-            System.out.println("[" + threadName + "] Article-Image: " + imgLink);
-            System.out.println("[" + threadName + "] Article-Category: " + category);
 
             Article a = new Article();
             a.setTitle(title);
@@ -87,7 +90,6 @@ public class Scraper {
             a.setCity(city);
             a.setCountry(country);
             a.setContinent(continent);
-            a.setRegion(region);
             a.setCategory(category);
             a.setX(x);
             a.setY(y);
@@ -95,13 +97,20 @@ public class Scraper {
 
             aRepo.save(a);
             System.out.println("[" + threadName + "] Saving the article in db with the ID: " + a.getId());
+            driver.quit();
         }
         catch (Exception e) {
             String threadName = Thread.currentThread().getName();
             System.err.println("[" + threadName + "] Failed to extract info from: " + url + ": " + e.getMessage());
+            driver.close();
+            driver.quit();
         }
         finally {
-            driver.quit();
+            WebDriver ld = localDriver.get();
+            if (ld != null) {
+                ld.quit();
+                localDriver.remove();
+            }
         }
     }
 
@@ -121,7 +130,7 @@ public class Scraper {
                 return content;
             }
 
-            return "No text or content found";
+            return null;
         } catch (Exception e) {
             return null;
         }
