@@ -71,8 +71,17 @@ public class Scraper {
             }
 
             String city = res[0], country = res[1], continent = res[2],
-                    category = res[3], x = res[4], y = res[5];
-
+                    category = res[3];
+            float x = 0, y = 0;
+            try {
+                x = Float.parseFloat(res[4]);
+                y = Float.parseFloat(res[5]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.err.println("[" + threadName + "] " + "Prompt gone wrong, coordinates are string");
+                driver.close();
+                driver.quit();
+            }
             String sourceName = regex.urlName(url);
             String imgLink = regex.imageSrc(imgUrl);
 
@@ -91,8 +100,8 @@ public class Scraper {
             a.setCountry(country);
             a.setContinent(continent);
             a.setCategory(category);
-            a.setX(x);
-            a.setY(y);
+            a.setX(String.valueOf(x));
+            a.setY(String.valueOf(y));
             a.setImgUrl(imgLink);
 
             aRepo.save(a);
