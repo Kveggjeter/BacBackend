@@ -8,10 +8,8 @@ import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.bac.bacbackend.domain.model.StringResource;
 import com.bac.bacbackend.domain.service.OpenAi;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,18 +45,24 @@ public class Controller {
     public String index() { return "Application is running"; }
 
     @RequestMapping("/read")
-    public String read() { return repo.findById("1").toString(); }
+    public String read() { return repo.findById("https://asianews.network/cutting-edge-features-help-chinas-homegrown-aircraft-fly-even-higher/").toString(); }
 
-    @RequestMapping("/save")
-    public String save() {
-        Article a = new Article();
-        a.setSourceName("a jerk");
-        a.setId("www.yourmomlllll.com");
-        a.setTitle("nice");
-        a.setImgUrl("www.nty.io");
-        repo.save(a);
-        return a.toString();
+    @GetMapping("/country")
+    public int country(@RequestParam String country) {
+        int count = 0;
+        Iterable<Article> articles = repo.findAll();
+        for (Article article : articles) {
+            if (article != null &&
+                    article.getCountry() != null &&
+                    article.getCountry().equalsIgnoreCase(country))
+            {
+                count++;
+            }
+        }
+        return count;
     }
+
+
 
     @RequestMapping("/start")
     public String start() {
