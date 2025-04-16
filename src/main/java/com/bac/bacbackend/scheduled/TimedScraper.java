@@ -25,7 +25,7 @@ public class TimedScraper {
      */
     @Scheduled (cron = "0 0 0,6 * * *")
     public void scrape() {
-        int n = ws.countSource();
+        int n = ws.getCount();
         bot.start(n, 5);
     }
 }

@@ -3,7 +3,6 @@ package com.bac.bacbackend.data.scraper.config;
 import com.bac.bacbackend.data.repository.NewSourceRepository;
 import com.bac.bacbackend.domain.model.NewSource;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * TODO: re(move)?
  */
 @Component
-public class WebSetter extends WebSource {
+public class WebSetter extends WebSource<NewSource, String> {
 
     public WebSetter(NewSourceRepository nsRepo) {
         super(nsRepo);
@@ -47,13 +46,7 @@ public class WebSetter extends WebSource {
         return getData(NewSource::getSum);
     }
 
-    /**
-     *
-     * @returns the amount of newsSources to be iterated.
-     */
-    public int countSource() {
-        return ns.size() - 1;
-    }
+    public int getCount() { return countSource(); }
 
     public ArrayList<String> make(int n) {
         ArrayList<String> sources = new ArrayList<>();
@@ -66,8 +59,4 @@ public class WebSetter extends WebSource {
         sources.add(getSum().get(n));
         return sources;
     }
-
-
-
-
 }
