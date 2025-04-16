@@ -1,10 +1,15 @@
 package com.bac.bacbackend.controller;
 
+import com.bac.bacbackend.data.repository.CacheController;
+import com.bac.bacbackend.data.repository.NewSourceRepository;
+import com.bac.bacbackend.data.repository.ScraperObjectRepository;
 import com.bac.bacbackend.data.scraper.StringBank;
 import com.bac.bacbackend.data.scraper.WebCrawler;
+import com.bac.bacbackend.data.scraper.config.WebSetter;
 import com.bac.bacbackend.domain.model.Article;
 import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.ArticleRepository;
+import com.bac.bacbackend.domain.model.NewSource;
 import com.bac.bacbackend.domain.model.StringResource;
 import com.bac.bacbackend.domain.service.OpenAi;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +23,13 @@ import java.util.List;
 public class Controller {
 
     private final Bot bot;
+    private final ScraperObjectRepository scrapRepo;
+    private final NewSourceRepository nsRepo;
     private final ArticleRepository repo;
-    private final StringBank sb;
     private final OpenAi ai;
     private final WebCrawler webCrawler;
+    private final CacheController cache;
+    private final WebSetter ws;
     @Value("${ai.summary}")
     private String coSummary;
     private final String command = StringResource.COMMAND.getValue();
@@ -33,16 +41,29 @@ public class Controller {
     protected final String skyTitle = "h1";
     protected final String skySum = "div.article-content";
 
-    private Controller (Bot bot, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler, StringBank sb) {
+    private Controller (Bot bot, ScraperObjectRepository scrapRepo, NewSourceRepository nsRepo, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler, CacheController cache, WebSetter ws) {
         this.bot = bot;
+        this.scrapRepo = scrapRepo;
+        this.nsRepo = nsRepo;
         this.repo = repo;
         this.ai = ai;
         this.webCrawler = webCrawler;
-        this.sb = sb;
+        this.cache = cache;
+        this.ws = ws;
     }
 
     @RequestMapping("/")
     public String index() { return "Application is running"; }
+
+    @RequestMapping("/cache")
+    public void ch () {
+        try {
+            cache.cache();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Bein til helvete som vanlig");
+        }
+    }
 
     @RequestMapping("/read")
     public String read() { return repo.findById("https://asianews.network/cutting-edge-features-help-chinas-homegrown-aircraft-fly-even-higher/").toString(); }
@@ -62,11 +83,14 @@ public class Controller {
         return count;
     }
 
-
+    @RequestMapping("/pg")
+    public String pg() {
+        return scrapRepo.findAll().toString();
+    }
 
     @RequestMapping("/start")
     public String start() {
-        int n = sb.getUrl().size() - 1;
+        int n = ws.countSource();
         bot.start(n);
         return "Scraping started";
     }
@@ -94,10 +118,25 @@ public class Controller {
      return (List<Article>) repo.findAll();
     }
 
-    @GetMapping("/single")
-    public String startSingle() {
-        bot.startSingle();
-        return "Single started";
+    @RequestMapping("/rs")
+    public List<NewSource> getRs() {
+        return (List<NewSource>) nsRepo.findAll();
     }
+
+    @RequestMapping("/ws")
+    public List<String> getws() {
+        return ws.getUrl();
+    }
+
+    @RequestMapping("/cs")
+    public String getcv() {
+        return ws.getUrl().get(1);
+    }
+
+//    @GetMapping("/single")
+//    public String startSingle() {
+//        bot.startSingle();
+//        return "Single started";
+//    }
 
 }
