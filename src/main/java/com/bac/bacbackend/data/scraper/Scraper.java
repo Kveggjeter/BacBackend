@@ -11,13 +11,15 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class Scraper {
     private final ArticleRepository aRepo;
     private final Regex regex;
     private final OpenAi ai;
     private final String command = StringResource.COMMAND.getValue();
-    private static final ThreadLocal<WebDriver> localDriver = new ThreadLocal<>();
+
 
     @Autowired
     public Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai) {
@@ -29,10 +31,9 @@ public class Scraper {
     /**
      * Remember to remove the prints, only here for debugging.
      */
-    public void scrape(String url, String imgUrl, String titleHeader, String sumBody) {
+    public void scrape(String url, String imgUrl, ArrayList<String> source) {
         BrowserSettings browserSettings = new BrowserSettings();
         WebDriver driver = browserSettings.driver();
-        localDriver.set(driver);
 
         try {
             String threadName = Thread.currentThread().getName();
@@ -46,8 +47,8 @@ public class Scraper {
                 return;
             }
 
-            String title = getElementText(driver, titleHeader);
-            String summary = getElementText(driver, sumBody);;
+            String title = getElementText(driver, source.get(5));
+            String summary = getElementText(driver, source.get(6));;
             System.out.println("[" + threadName + "] summary: " + summary);
 
             if (summary == null) {
@@ -113,13 +114,6 @@ public class Scraper {
             System.err.println("[" + threadName + "] Failed to extract info from: " + url + ": " + e.getMessage());
             driver.close();
             driver.quit();
-        }
-        finally {
-            WebDriver ld = localDriver.get();
-            if (ld != null) {
-                ld.quit();
-                localDriver.remove();
-            }
         }
     }
 

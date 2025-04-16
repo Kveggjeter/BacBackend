@@ -3,6 +3,8 @@ package com.bac.bacbackend.data.scraper.config;
 import com.bac.bacbackend.data.repository.NewSourceRepository;
 import com.bac.bacbackend.domain.model.NewSource;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +53,18 @@ public class WebSetter extends WebSource {
      */
     public int countSource() {
         return ns.size() - 1;
+    }
+
+    public ArrayList<String> make(int n) {
+        ArrayList<String> sources = new ArrayList<>();
+        sources.add(getUrl().get(n));
+        sources.add(getTxtLocator().get(n));
+        sources.add(getTxtHref().get(n));
+        sources.add(getImgLocator().get(n));
+        sources.add(getImgHref().get(n));
+        sources.add(getTitle().get(n));
+        sources.add(getSum().get(n));
+        return sources;
     }
 
 

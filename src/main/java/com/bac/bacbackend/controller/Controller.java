@@ -91,7 +91,7 @@ public class Controller {
     @RequestMapping("/start")
     public String start() {
         int n = ws.countSource();
-        bot.start(n);
+        bot.start(n, 5);
         return "Scraping started";
     }
 
@@ -108,7 +108,7 @@ public class Controller {
 
     @RequestMapping ("/crawl")
     public String crawl() {
-        webCrawler.startCrawling(5, skyUrl, skyTxtLocator, skyTxtHref, skyImgLocator, skyImgHref);
+        webCrawler.startCrawling(ws.countSource(), 5);
         return "Crawling started";
     }
 
