@@ -4,6 +4,7 @@ import com.bac.bacbackend.data.model.Article;
 import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.bac.bacbackend.data.model.StringResource;
 import com.bac.bacbackend.domain.model.SourceDto;
+import com.bac.bacbackend.domain.service.BrowserSettings;
 import com.bac.bacbackend.domain.service.OpenAi;
 import com.bac.bacbackend.domain.util.Regex;
 import org.openqa.selenium.By;
@@ -12,22 +13,21 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 @Component
 public class Scraper {
     private final ArticleRepository aRepo;
     private final Regex regex;
     private final OpenAi ai;
     private final String command = StringResource.COMMAND.getValue();
-    private final BrowserSettings bs = new BrowserSettings();
+    private final BrowserSettings bs;
 
 
     @Autowired
-    public Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai) {
+    public Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai, BrowserSettings bs) {
         this.aRepo = aRepo;
         this.regex = regex;
         this.ai = ai;
+        this.bs = bs;
     }
 
     /**
@@ -35,7 +35,7 @@ public class Scraper {
      */
     public void scrape(String url, String imgUrl, SourceDto s) {
 
-        WebDriver driver = bs.driver();
+        WebDriver driver = bs.create();
 
         try {
             String threadName = Thread.currentThread().getName();

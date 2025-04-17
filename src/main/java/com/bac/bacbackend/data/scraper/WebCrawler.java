@@ -4,6 +4,7 @@ import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.bac.bacbackend.data.scraper.config.WebSetter;
 import com.bac.bacbackend.domain.model.ArticleData;
 import com.bac.bacbackend.domain.model.SourceDto;
+import com.bac.bacbackend.domain.service.BrowserSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -18,27 +19,30 @@ public class WebCrawler {
     @Autowired
     private ArticleRepository aRepo;
     private final WebSetter wbs;
-    private final BrowserSettings bs = new BrowserSettings();
+    private final BrowserSettings bs;
 
-    public WebCrawler(ArticleRepository aRepo, WebSetter wbs) {
+    public WebCrawler(ArticleRepository aRepo, WebSetter wbs, BrowserSettings bs) {
         this.aRepo = aRepo;
         this.wbs = wbs;
+        this.bs = bs;
     }
 
     public ArrayList<ArticleData> startCrawling(int n, int maxNum) {
 
         ArrayList<ArticleData> articlesList = new ArrayList<>();
         SourceDto s = wbs.selectors(n);
-        WebDriver driver = bs.driver();
+        WebDriver driver = bs.create();
+        try {
+            driver.get(s.url());
+            System.out.println("Crawling webpage, please wait...");
+            crawl(0, driver, maxNum, s, articlesList);
 
-        System.out.println("Crawling webpage, please wait...");
+            int count = articlesList.size();
+            System.out.println("Crawling finished. Managed to get " + count + " amount of articles");
 
-        driver.get(s.url());
-        crawl(0, driver, maxNum, s, articlesList);
-        driver.quit();
-
-        int count = articlesList.size();
-        System.out.println("Crawling finished. Managed to get " + count + " amount of articles");
+        } finally {
+            driver.quit();
+        }
         return articlesList;
     }
 
