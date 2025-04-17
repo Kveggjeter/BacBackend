@@ -1,6 +1,6 @@
 package com.bac.bacbackend.data.repository;
 
-import com.bac.bacbackend.domain.model.NewSource;
+import com.bac.bacbackend.data.model.NewSource;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

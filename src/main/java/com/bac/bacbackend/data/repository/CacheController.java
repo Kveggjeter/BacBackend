@@ -1,7 +1,7 @@
 package com.bac.bacbackend.data.repository;
 
-import com.bac.bacbackend.domain.model.NewSource;
-import com.bac.bacbackend.domain.model.ScraperObject;
+import com.bac.bacbackend.data.model.NewSource;
+import com.bac.bacbackend.data.model.ScraperObject;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

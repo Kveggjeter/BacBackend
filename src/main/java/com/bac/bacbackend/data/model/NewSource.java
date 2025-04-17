@@ -1,4 +1,4 @@
-package com.bac.bacbackend.domain.model;
+package com.bac.bacbackend.data.model;
 
 import lombok.Getter;
 import lombok.Setter;

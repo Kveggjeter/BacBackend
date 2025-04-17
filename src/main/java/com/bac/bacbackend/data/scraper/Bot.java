@@ -1,6 +1,8 @@
 package com.bac.bacbackend.data.scraper;
 
 import com.bac.bacbackend.data.scraper.config.WebSetter;
+import com.bac.bacbackend.domain.model.ArticleData;
+import com.bac.bacbackend.domain.model.SourceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -19,7 +21,6 @@ public class Bot {
     private final WebCrawler webCrawler;
     private final WebSetter wbs;
     private final Scraper scraper;
-    private final int threadNumber = 5;
 
     @Autowired
     public Bot(WebCrawler webCrawler, Scraper scraper, WebSetter wbs) {
@@ -34,25 +35,23 @@ public class Bot {
             System.out.println("Webscraping has finished.");
             return;
         }
-
-        ArrayList<WebCrawler.ArticleData> articles = webCrawler.startCrawling(n, maxNum);
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+        SourceDto selectors = wbs.selectors(n);
+        ArrayList<ArticleData> articles = webCrawler.startCrawling(n, maxNum);
         System.out.println("Sending articles to scraper...");
-        ExecutorService executorService = Executors.newFixedThreadPool(threadNumber);
 
-        for (WebCrawler.ArticleData articleData : articles) {
-            executorService.submit(() -> {
-                scraper.scrape(articleData.articleUrl(), articleData.imgUrl(), wbs.make(n));
-            });
+        for (ArticleData a : articles) {
+            pool.submit(() -> scraper.scrape(a.articleUrl(), a.imgUrl(), selectors));
         }
 
-        executorService.shutdown();
+        pool.shutdown();
         try {
-            if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
-                executorService.shutdownNow();
+            if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                pool.shutdownNow();
             }
         }
         catch (InterruptedException e) {
-            executorService.shutdownNow();
+            pool.shutdownNow();
         }
             System.out.println("Scraping finished for index: " + n);
             start(n - 1, maxNum);

@@ -1,33 +1,45 @@
 package com.bac.bacbackend.data.scraper.config;
 
-import com.bac.bacbackend.data.repository.NewSourceRepository;
-import com.bac.bacbackend.domain.model.NewSource;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 /**
  * Ground class for collecting sources for scraping. Might make this even more
  * generic for the sake of OOP later on.
  */
 public abstract class WebSource<T, ID> {
 
-    protected final Collection<T> item;
+    private final CrudRepository<T, ID> repo;
 
     protected WebSource(CrudRepository<T, ID> repo) {
-        this.item = (Collection<T>) repo.findAll();
+        this.repo = repo;
     }
 
-    protected <R> List<R> getData(Function<T, R> f) {
-        return item.stream()
-                .filter(Objects::nonNull)
-                .map(f)
-                .collect(Collectors.toList());
+    /**
+     * Return all rows as a List.
+     * @return
+     */
+    protected List<T> findAll() {
+        List<T> list = new ArrayList<>();
+        repo.findAll().forEach(list::add);
+        return list;
     }
 
-    protected int countSource() { return item.size() - 1; }
+    /**
+     * Size of object, used for determing iterations
+     * @return
+     */
+    protected int size() {
+        return (int) repo.count() - 1;
+    }
+
+    /**
+     * Fetching one row
+     * @param index
+     * @return
+     */
+    protected T get(int index) {
+        List<T> all = findAll();
+        return all.get(index);
+    }
 }

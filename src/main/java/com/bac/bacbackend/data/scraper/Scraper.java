@@ -1,8 +1,9 @@
 package com.bac.bacbackend.data.scraper;
 
-import com.bac.bacbackend.domain.model.Article;
+import com.bac.bacbackend.data.model.Article;
 import com.bac.bacbackend.data.repository.ArticleRepository;
-import com.bac.bacbackend.domain.model.StringResource;
+import com.bac.bacbackend.data.model.StringResource;
+import com.bac.bacbackend.domain.model.SourceDto;
 import com.bac.bacbackend.domain.service.OpenAi;
 import com.bac.bacbackend.domain.util.Regex;
 import org.openqa.selenium.By;
@@ -19,6 +20,7 @@ public class Scraper {
     private final Regex regex;
     private final OpenAi ai;
     private final String command = StringResource.COMMAND.getValue();
+    private final BrowserSettings bs = new BrowserSettings();
 
 
     @Autowired
@@ -31,9 +33,9 @@ public class Scraper {
     /**
      * Remember to remove the prints, only here for debugging.
      */
-    public void scrape(String url, String imgUrl, ArrayList<String> source) {
-        BrowserSettings browserSettings = new BrowserSettings();
-        WebDriver driver = browserSettings.driver();
+    public void scrape(String url, String imgUrl, SourceDto s) {
+
+        WebDriver driver = bs.driver();
 
         try {
             String threadName = Thread.currentThread().getName();
@@ -47,8 +49,8 @@ public class Scraper {
                 return;
             }
 
-            String title = getElementText(driver, source.get(5));
-            String summary = getElementText(driver, source.get(6));;
+            String title = getElementText(driver, s.title());
+            String summary = getElementText(driver, s.sum());;
             System.out.println("[" + threadName + "] summary: " + summary);
 
             if (summary == null) {

@@ -1,7 +1,5 @@
-package com.bac.bacbackend.domain.model;
+package com.bac.bacbackend.data.model;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import java.time.LocalDateTime;

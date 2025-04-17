@@ -2,6 +2,8 @@ package com.bac.bacbackend.data.scraper;
 
 import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.bac.bacbackend.data.scraper.config.WebSetter;
+import com.bac.bacbackend.domain.model.ArticleData;
+import com.bac.bacbackend.domain.model.SourceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -16,71 +18,65 @@ public class WebCrawler {
     @Autowired
     private ArticleRepository aRepo;
     private final WebSetter wbs;
+    private final BrowserSettings bs = new BrowserSettings();
 
-    public WebCrawler(WebSetter wbs) {
+    public WebCrawler(ArticleRepository aRepo, WebSetter wbs) {
+        this.aRepo = aRepo;
         this.wbs = wbs;
     }
 
-    /**
-     * Running this each time necessary.
-     * @param n
-     * @param maxNum
-     * @return
-     */
     public ArrayList<ArticleData> startCrawling(int n, int maxNum) {
 
         ArrayList<ArticleData> articlesList = new ArrayList<>();
-        ArrayList<String> source = wbs.make(n);
-        BrowserSettings bs = new BrowserSettings();
+        SourceDto s = wbs.selectors(n);
         WebDriver driver = bs.driver();
 
         System.out.println("Crawling webpage, please wait...");
 
-        driver.get(source.get(0));
-        ArrayList<ArticleData> articles = crawl(0, driver, maxNum, source, articlesList);
+        driver.get(s.url());
+        crawl(0, driver, maxNum, s, articlesList);
         driver.quit();
 
         int count = articlesList.size();
         System.out.println("Crawling finished. Managed to get " + count + " amount of articles");
-        return articles;
+        return articlesList;
     }
 
-    /**
-     * We've already found most of the actual info. Scraper is more for location and categorization.
-     * @param index
-     * @param driver
-     * @param maxNum
-     * @param source
-     * @param articlesList
-     * @return
-     */
-    private ArrayList<ArticleData> crawl(int index, WebDriver driver, int maxNum, ArrayList<String> source, ArrayList<ArticleData> articlesList) {
-        if (articlesList.size() >= maxNum) return articlesList;
+    private ArrayList<ArticleData> crawl(
+            int index,
+            WebDriver driver,
+            int maxNum,
+            SourceDto s,
+            ArrayList<ArticleData> list) {
+        if (list.size() >= maxNum) return list;
 
         try {
-            List<WebElement> articles = driver.findElements(By.cssSelector(source.get(1)));
-            List<WebElement> img = driver.findElements(By.cssSelector(source.get(3)));
+            List<WebElement> articles = driver.findElements(By.cssSelector(s.txtLocator()));
+            List<WebElement> img = driver.findElements(By.cssSelector(s.imgLocator()));
 
             if (index < articles.size()) {
-                String url = articles.get(index).getAttribute(source.get(2));
-                String imgUrl = (index < img.size()) ? img.get(index).getAttribute(source.get(4)) : "NO_IMAGE";
-                assert url != null;
+                String url = articles.get(index).getAttribute(s.txtHref());
+                String imgUrl = (index < img.size()) ? img.get(index).getAttribute(s.imgHref()) : "NO_IMAGE";
 
-                if(!aRepo.existsById(url) && !articlesList.contains(new ArticleData(url, imgUrl))){
-                    articlesList.add(new ArticleData(url, imgUrl));
+                    if(
+                        url != null
+                        && !aRepo.existsById(url)
+                        && !list.contains(new ArticleData(url, imgUrl))
+                    ){
+                            list.add(new ArticleData(url, imgUrl));
+                            System.out.println("Fetched article #" + list.size() + ": " + url);
+                            System.out.println("Fetched img #" + list.size() + ": " + imgUrl);
+                        }
 
-                    System.out.println("Fetched article #" + articlesList.size() + ": " + url);
-                    System.out.println("Fetched img #" + articlesList.size() + ": " + imgUrl);
-                }
-                return crawl(index + 1, driver, maxNum, source, articlesList);
+                return crawl(index + 1, driver, maxNum, s, list);
             }
         } catch (Exception e) {
             System.out.println("Error while fetching articles: " + e.getMessage());
         }
-        return articlesList;
+        return list;
     }
 
-    public record ArticleData(String articleUrl, String imgUrl) {}
+
 }
 
 

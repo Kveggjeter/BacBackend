@@ -3,14 +3,13 @@ package com.bac.bacbackend.controller;
 import com.bac.bacbackend.data.repository.CacheController;
 import com.bac.bacbackend.data.repository.NewSourceRepository;
 import com.bac.bacbackend.data.repository.ScraperObjectRepository;
-import com.bac.bacbackend.data.scraper.StringBank;
 import com.bac.bacbackend.data.scraper.WebCrawler;
 import com.bac.bacbackend.data.scraper.config.WebSetter;
-import com.bac.bacbackend.domain.model.Article;
+import com.bac.bacbackend.data.model.Article;
 import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.ArticleRepository;
-import com.bac.bacbackend.domain.model.NewSource;
-import com.bac.bacbackend.domain.model.StringResource;
+import com.bac.bacbackend.data.model.NewSource;
+import com.bac.bacbackend.data.model.StringResource;
 import com.bac.bacbackend.domain.service.OpenAi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -91,7 +90,7 @@ public class Controller {
     @RequestMapping("/start")
     public String start() {
         int n = ws.getCount();
-        bot.start(n, 5);
+        bot.start(n, 2);
         return "Scraping started";
     }
 
@@ -123,15 +122,6 @@ public class Controller {
         return (List<NewSource>) nsRepo.findAll();
     }
 
-    @RequestMapping("/ws")
-    public List<String> getws() {
-        return ws.getUrl();
-    }
-
-    @RequestMapping("/cs")
-    public String getcv() {
-        return ws.getUrl().get(1);
-    }
 
 //    @GetMapping("/single")
 //    public String startSingle() {
