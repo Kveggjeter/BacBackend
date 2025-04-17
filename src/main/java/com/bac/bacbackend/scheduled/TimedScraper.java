@@ -1,7 +1,7 @@
 package com.bac.bacbackend.scheduled;
 
 import com.bac.bacbackend.data.scraper.Bot;
-import com.bac.bacbackend.data.scraper.config.WebSetter;
+import com.bac.bacbackend.data.scraper.config.WebGetter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class TimedScraper {
-    private final WebSetter ws;
+    private final WebGetter ws;
     private final Bot bot;
 
-    private TimedScraper (WebSetter ws, Bot bot) {
+    private TimedScraper (WebGetter ws, Bot bot) {
         this.ws = ws;
         this.bot = bot;
     }

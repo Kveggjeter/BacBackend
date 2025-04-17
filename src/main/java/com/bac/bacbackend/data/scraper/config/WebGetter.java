@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
  * TODO: re(move)?
  */
 @Component
-public class WebSetter extends WebSource<NewSource, String> {
+public class WebGetter extends DataSourceHandler<NewSource, String> {
 
-    public WebSetter(NewSourceRepository repo) {
+    public WebGetter(NewSourceRepository repo) {
         super(repo);
     }
 

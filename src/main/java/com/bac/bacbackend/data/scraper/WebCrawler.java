@@ -1,7 +1,7 @@
 package com.bac.bacbackend.data.scraper;
 
 import com.bac.bacbackend.data.repository.ArticleRepository;
-import com.bac.bacbackend.data.scraper.config.WebSetter;
+import com.bac.bacbackend.data.scraper.config.WebGetter;
 import com.bac.bacbackend.domain.model.ArticleData;
 import com.bac.bacbackend.domain.model.SourceDto;
 import com.bac.bacbackend.domain.service.BrowserSettings;
@@ -18,10 +18,10 @@ public class WebCrawler {
 
     @Autowired
     private ArticleRepository aRepo;
-    private final WebSetter wbs;
+    private final WebGetter wbs;
     private final BrowserSettings bs;
 
-    public WebCrawler(ArticleRepository aRepo, WebSetter wbs, BrowserSettings bs) {
+    public WebCrawler(ArticleRepository aRepo, WebGetter wbs, BrowserSettings bs) {
         this.aRepo = aRepo;
         this.wbs = wbs;
         this.bs = bs;

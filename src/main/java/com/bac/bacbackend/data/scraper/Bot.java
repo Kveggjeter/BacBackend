@@ -1,6 +1,6 @@
 package com.bac.bacbackend.data.scraper;
 
-import com.bac.bacbackend.data.scraper.config.WebSetter;
+import com.bac.bacbackend.data.scraper.config.WebGetter;
 import com.bac.bacbackend.domain.model.ArticleData;
 import com.bac.bacbackend.domain.model.SourceDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class Bot {
     private final WebCrawler webCrawler;
-    private final WebSetter wbs;
+    private final WebGetter wbs;
     private final Scraper scraper;
 
     @Autowired
-    public Bot(WebCrawler webCrawler, Scraper scraper, WebSetter wbs) {
+    public Bot(WebCrawler webCrawler, Scraper scraper, WebGetter wbs) {
         this.webCrawler = webCrawler;
         this.scraper = scraper;
         this.wbs = wbs;

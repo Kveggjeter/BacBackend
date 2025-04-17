@@ -4,7 +4,7 @@ import com.bac.bacbackend.data.repository.CacheController;
 import com.bac.bacbackend.data.repository.NewSourceRepository;
 import com.bac.bacbackend.data.repository.ScraperObjectRepository;
 import com.bac.bacbackend.data.scraper.WebCrawler;
-import com.bac.bacbackend.data.scraper.config.WebSetter;
+import com.bac.bacbackend.data.scraper.config.WebGetter;
 import com.bac.bacbackend.data.model.Article;
 import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.ArticleRepository;
@@ -28,7 +28,7 @@ public class Controller {
     private final OpenAi ai;
     private final WebCrawler webCrawler;
     private final CacheController cache;
-    private final WebSetter ws;
+    private final WebGetter ws;
     @Value("${ai.summary}")
     private String coSummary;
     private final String command = StringResource.COMMAND.getValue();
@@ -40,7 +40,7 @@ public class Controller {
     protected final String skyTitle = "h1";
     protected final String skySum = "div.article-content";
 
-    private Controller (Bot bot, ScraperObjectRepository scrapRepo, NewSourceRepository nsRepo, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler, CacheController cache, WebSetter ws) {
+    private Controller (Bot bot, ScraperObjectRepository scrapRepo, NewSourceRepository nsRepo, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler, CacheController cache, WebGetter ws) {
         this.bot = bot;
         this.scrapRepo = scrapRepo;
         this.nsRepo = nsRepo;
@@ -90,7 +90,7 @@ public class Controller {
     @RequestMapping("/start")
     public String start() {
         int n = ws.getCount();
-        bot.start(n, 2);
+        bot.start(n, 1);
         return "Scraping started";
     }
 

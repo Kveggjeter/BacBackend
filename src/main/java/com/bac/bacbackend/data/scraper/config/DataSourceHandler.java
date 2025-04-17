@@ -7,11 +7,11 @@ import java.util.List;
  * Ground class for collecting sources for scraping. Might make this even more
  * generic for the sake of OOP later on.
  */
-public abstract class WebSource<T, ID> {
+public abstract class DataSourceHandler<T, ID> {
 
     private final CrudRepository<T, ID> repo;
 
-    protected WebSource(CrudRepository<T, ID> repo) {
+    protected DataSourceHandler(CrudRepository<T, ID> repo) {
         this.repo = repo;
     }
 
@@ -41,5 +41,12 @@ public abstract class WebSource<T, ID> {
     protected T get(int index) {
         List<T> all = findAll();
         return all.get(index);
+    }
+
+    /**
+     * Adding a value
+     */
+    protected void add(T t) {
+        repo.save(t);
     }
 }

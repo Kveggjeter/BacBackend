@@ -1,8 +1,7 @@
 package com.bac.bacbackend.data.scraper;
 
-import com.bac.bacbackend.data.model.Article;
-import com.bac.bacbackend.data.repository.ArticleRepository;
 import com.bac.bacbackend.data.model.StringResource;
+import com.bac.bacbackend.data.scraper.config.ArticleSetter;
 import com.bac.bacbackend.domain.model.SourceDto;
 import com.bac.bacbackend.domain.service.BrowserSettings;
 import com.bac.bacbackend.domain.service.OpenAi;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Scraper {
-    private final ArticleRepository aRepo;
+    private final ArticleSetter aSet;
     private final Regex regex;
     private final OpenAi ai;
     private final String command = StringResource.COMMAND.getValue();
@@ -23,8 +22,8 @@ public class Scraper {
 
 
     @Autowired
-    public Scraper(ArticleRepository aRepo, Regex regex, OpenAi ai, BrowserSettings bs) {
-        this.aRepo = aRepo;
+    public Scraper(ArticleSetter aSet, Regex regex, OpenAi ai, BrowserSettings bs) {
+        this.aSet = aSet;
         this.regex = regex;
         this.ai = ai;
         this.bs = bs;
@@ -94,21 +93,9 @@ public class Scraper {
                 imgLink = regex.imageSrc(resImg);
             }
 
-            Article a = new Article();
-            a.setTitle(title);
-            a.setSummary(summary);
-            a.setId(url);
-            a.setSourceName(sourceName);
-            a.setCity(city);
-            a.setCountry(country);
-            a.setContinent(continent);
-            a.setCategory(category);
-            a.setX(String.valueOf(x));
-            a.setY(String.valueOf(y));
-            a.setImgUrl(imgLink);
+            aSet.adders(url, title, summary, city, country, continent, category, String.valueOf(x), String.valueOf(y), imgLink, sourceName);
 
-            aRepo.save(a);
-            System.out.println("[" + threadName + "] Saving the article in db with the ID: " + a.getId());
+            System.out.println("[" + threadName + "] Saving the article in db with the ID: " + url);
             driver.quit();
         }
         catch (Exception e) {

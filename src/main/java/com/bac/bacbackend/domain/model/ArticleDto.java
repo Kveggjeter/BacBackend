@@ -7,11 +7,9 @@ public record ArticleDto(
         String summary,
         String city,
         String country,
-        String region,
         String continent,
         String category,
         String x,
         String y,
-        String imgUrl,
-        String ldt
+        String imgUrl
 ) {}
