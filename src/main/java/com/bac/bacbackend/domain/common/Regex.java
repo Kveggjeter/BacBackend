@@ -12,6 +12,7 @@ public class Regex {
     @Value("${regex.firstWord}")
     private String firstWord;
     @Value("${regex.link}")
+    private String link;
 
     public String urlName(String s) {
         Matcher mx = Pattern.compile(firstWord).matcher(s);

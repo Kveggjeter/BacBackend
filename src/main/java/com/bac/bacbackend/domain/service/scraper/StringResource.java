@@ -1,4 +1,4 @@
-package com.bac.bacbackend.data.util;
+package com.bac.bacbackend.domain.service.scraper;
 
 import lombok.Getter;
 

@@ -1,6 +1,5 @@
 package com.bac.bacbackend.domain.service.scraper;
 
-import com.bac.bacbackend.data.util.StringResource;
 import com.bac.bacbackend.data.repository.article.ArticleRepo;
 import com.bac.bacbackend.domain.model.article.Article;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;

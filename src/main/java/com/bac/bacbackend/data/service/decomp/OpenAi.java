@@ -1,5 +1,6 @@
 package com.bac.bacbackend.data.service.decomp;
 
+import com.bac.bacbackend.domain.port.IOpenAi;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatCompletionCreateParams;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
  * https://github.com/openai/openai-java
  */
 @Component
-public class OpenAi {
+public class OpenAi implements IOpenAi {
 
     @Value("${api.key}")
     private String api;

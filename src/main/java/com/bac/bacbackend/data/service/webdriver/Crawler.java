@@ -6,7 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component
@@ -25,11 +24,23 @@ public final class Crawler implements ICrawler {
         index = n;
     }
 
-    public String value(String s, String t) {
+    public String values(String s, String t) {
         getDriver();
         setElement(t);
-        List<WebElement> e = getElement(str);
+        List<WebElement> e = getElements(str);
         return e.get(index).getAttribute(s);
+    }
+
+    public String value(String s) {
+        getDriver();
+        WebElement e = getElement(s);
+        return e.getText();
+    }
+
+    public String redo(String s) {
+        getDriver();
+        WebElement e = getElement(s);
+        return e.getAttribute("src");
     }
 
     private void setElement(String s) {
@@ -40,8 +51,32 @@ public final class Crawler implements ICrawler {
         driver = br.getDriver();
     }
 
-    private List<WebElement> getElement(String s) {
+    private WebElement getElement(String s) {
+        return driver.findElement(By.cssSelector(s));
+    }
+
+    private List<WebElement> getElements(String s) {
         return driver.findElements(By.cssSelector(s));
+    }
+
+
+    // *************** Code for further abstraction? ***************
+
+    private String isTxt(WebElement wb) {
+        try {
+            String txt = wb.getText();
+            if (!txt.trim().isEmpty()) {
+                return txt;
+            }
+
+            String content = wb.getAttribute("content");
+            if (content != null && !content.trim().isEmpty())
+                return content;
+
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

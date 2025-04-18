@@ -58,7 +58,7 @@
 //            System.out.println("Scraping finished for index: " + n);
 //            start(n - 1, maxNum);
 //    }
-
+//
 //    public void startSingle() {
 //
 //        List<WebCrawler.ArticleData> articles = webCrawler.startCrawling(
