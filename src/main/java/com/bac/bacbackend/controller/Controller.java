@@ -1,34 +1,32 @@
 package com.bac.bacbackend.controller;
 
-import com.bac.bacbackend.data.repository.CacheController;
-import com.bac.bacbackend.data.repository.NewSourceRepository;
-import com.bac.bacbackend.data.repository.ScraperObjectRepository;
-import com.bac.bacbackend.data.scraper.WebCrawler;
-import com.bac.bacbackend.data.scraper.config.WebGetter;
-import com.bac.bacbackend.data.model.Article;
-import com.bac.bacbackend.data.scraper.Bot;
-import com.bac.bacbackend.data.repository.ArticleRepository;
-import com.bac.bacbackend.data.model.NewSource;
-import com.bac.bacbackend.data.model.StringResource;
-import com.bac.bacbackend.domain.service.OpenAi;
+import com.bac.bacbackend.domain.port.IScraperObjectRepo;
+import com.bac.bacbackend.data.repository.scraper.NewsParamDataRepo;
+import com.bac.bacbackend.data.repository.automation.ScraperDataObjectRepo;
+import com.bac.bacbackend.domain.service.scraper.CrawlStrategy;
+import com.bac.bacbackend.data.repository.scraper.NewsParamRepo;
+//import com.bac.bacbackend.data.scraper.Bot;
+import com.bac.bacbackend.data.repository.article.ArticleDataRepo;
+import com.bac.bacbackend.data.util.StringResource;
+import com.bac.bacbackend.data.service.decomp.OpenAi;
+import com.bac.bacbackend.domain.service.scraper.IStart;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class Controller {
 
-    private final Bot bot;
-    private final ScraperObjectRepository scrapRepo;
-    private final NewSourceRepository nsRepo;
-    private final ArticleRepository repo;
+//    private final Bot bot;
+    private final ScraperDataObjectRepo scrapRepo;
+    private final NewsParamDataRepo nsRepo;
+    private final ArticleDataRepo repo;
     private final OpenAi ai;
-    private final WebCrawler webCrawler;
-    private final CacheController cache;
-    private final WebGetter ws;
+    private final IScraperObjectRepo cache;
+    private final NewsParamRepo ws;
+    private final CrawlStrategy crawler;
     @Value("${ai.summary}")
     private String coSummary;
     private final String command = StringResource.COMMAND.getValue();
@@ -40,15 +38,15 @@ public class Controller {
     protected final String skyTitle = "h1";
     protected final String skySum = "div.article-content";
 
-    private Controller (Bot bot, ScraperObjectRepository scrapRepo, NewSourceRepository nsRepo, ArticleRepository repo, OpenAi ai, WebCrawler webCrawler, CacheController cache, WebGetter ws) {
-        this.bot = bot;
+    private Controller (ScraperDataObjectRepo scrapRepo, NewsParamDataRepo nsRepo, ArticleDataRepo repo, OpenAi ai, IScraperObjectRepo cache, NewsParamRepo ws, CrawlStrategy crawler) {
+        // this.bot = bot;
         this.scrapRepo = scrapRepo;
         this.nsRepo = nsRepo;
         this.repo = repo;
         this.ai = ai;
-        this.webCrawler = webCrawler;
         this.cache = cache;
         this.ws = ws;
+        this.crawler = crawler;
     }
 
     @RequestMapping("/")
@@ -67,20 +65,20 @@ public class Controller {
     @RequestMapping("/read")
     public String read() { return repo.findById("https://asianews.network/cutting-edge-features-help-chinas-homegrown-aircraft-fly-even-higher/").toString(); }
 
-    @GetMapping("/country")
-    public int country(@RequestParam String country) {
-        int count = 0;
-        Iterable<Article> articles = repo.findAll();
-        for (Article article : articles) {
-            if (article != null &&
-                    article.getCountry() != null &&
-                    article.getCountry().equalsIgnoreCase(country))
-            {
-                count++;
-            }
-        }
-        return count;
-    }
+//    @GetMapping("/country")
+//    public int country(@RequestParam String country) {
+//        int count = 0;
+//        Iterable<Article> articles = repo.findAll();
+//        for (Article article : articles) {
+//            if (article != null &&
+//                    article.getCountry() != null &&
+//                    article.getCountry().equalsIgnoreCase(country))
+//            {
+//                count++;
+//            }
+//        }
+//        return count;
+//    }
 
     @RequestMapping("/pg")
     public String pg() {
@@ -90,7 +88,7 @@ public class Controller {
     @RequestMapping("/start")
     public String start() {
         int n = ws.getCount();
-        bot.start(n, 1);
+        // bot.start(n, 1);
         return "Scraping started";
     }
 
@@ -107,20 +105,10 @@ public class Controller {
 
     @RequestMapping ("/crawl")
     public String crawl() {
-        webCrawler.startCrawling(ws.getCount(), 5);
+        crawler.crawl(ws.getCount());
         return "Crawling started";
     }
 
-
-    @GetMapping("/news")
-    public List<Article> getNews() {
-     return (List<Article>) repo.findAll();
-    }
-
-    @RequestMapping("/rs")
-    public List<NewSource> getRs() {
-        return (List<NewSource>) nsRepo.findAll();
-    }
 
 
 //    @GetMapping("/single")
