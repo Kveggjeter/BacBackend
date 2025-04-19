@@ -4,7 +4,7 @@ import com.bac.bacbackend.domain.model.article.Article;
 import com.bac.bacbackend.domain.port.IArticleRepo;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import com.bac.bacbackend.domain.port.IScraperObjectRepo;
-import com.bac.bacbackend.domain.service.scraper.ScraperStrat;
+import com.bac.bacbackend.domain.service.routine.BotController;
 import com.bac.bacbackend.domain.service.scraper.WebCrawler;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,26 +19,26 @@ public class Controller {
     private final WebCrawler wc;
     private final INewsParamRepo nRepo;
     private final IArticleRepo aRepo;
-    private final ScraperStrat st;
     private final IScraperObjectRepo sRepo;
+    private final BotController bot;
 
-    private Controller(WebCrawler wc, INewsParamRepo nRepo, IArticleRepo aRepo, ScraperStrat st, IScraperObjectRepo sRepo) {
+    private Controller(WebCrawler wc, INewsParamRepo nRepo, IArticleRepo aRepo, IScraperObjectRepo sRepo, BotController bot) {
         this.wc = wc;
         this.nRepo = nRepo;
         this.aRepo = aRepo;
-        this.st = st;
         this.sRepo = sRepo;
+        this.bot = bot;
     }
 
     @RequestMapping("/crawl")
     public String crawl() {
-        wc.crawl(nRepo.getCount());
+        wc.crawl(nRepo.getCount(), 5);
         return "Crawling started";
     }
 
     @RequestMapping("/start")
         public String scrape() {
-            st.start("https://www.reuters.com/legal/trump-challenges-judges-probes-compliance-with-deportation-orders-2025-04-17/");
+            bot.start(nRepo.getCount(), 5);
             return "Skraping starta";
     }
 

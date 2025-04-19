@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public final class Chrome implements Browser, IChrome {
 
     private final ChromeBrowser props;
-    private WebDriver driver;
+    private final ThreadLocal<WebDriver> td = new ThreadLocal<>();
 
     public Chrome(ChromeBrowser props) {
         this.props = props;
@@ -29,17 +29,31 @@ public final class Chrome implements Browser, IChrome {
     @Override
     public void start(String s) {
         WebDriver dr = create();
-        driver = dr;
+        td.set(dr);
         dr.get(s);
     }
 
+    @Override
     public WebDriver getDriver() {
-        return driver;
+        WebDriver dr = td.get();
+        if (dr == null) {
+            throw new IllegalStateException("Driver not created, call start again");
+        }
+        return dr;
     }
 
     @Override
     public void stop() {
-        driver.quit();
+        WebDriver dr = td.get();
+        if (dr != null) {
+            try {
+                dr.quit();
+            } catch (Exception e) {
+                System.err.println("Error quitting driver: " + e);
+            } finally {
+                td.remove();
+            }
+        }
     }
 
 }

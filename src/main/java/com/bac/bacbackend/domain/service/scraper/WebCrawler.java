@@ -28,10 +28,12 @@ public class WebCrawler extends Spider {
         this.nRepo = nRepo;
     }
 
-    public ArrayList<ArticleData> crawl(int n) {
+    public ArrayList<ArticleData> crawl(int n, int max) {
+        if(list !=null)
+            list.clear();
         useList();
         propsSetter(n);
-        setMaxNum(n);
+        setMaxNum(max);
         browser.start(sp.url());
 
         try {
