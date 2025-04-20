@@ -3,13 +3,14 @@ package com.bac.bacbackend.data.repository.article;
 import com.bac.bacbackend.data.model.article.ArticleEntity;
 import com.bac.bacbackend.data.repository.common.DataSourceHandler;
 import com.bac.bacbackend.domain.model.article.Article;
+import com.bac.bacbackend.domain.port.IArticleRepo;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ArticleRepo extends DataSourceHandler<ArticleEntity, String> implements com.bac.bacbackend.domain.port.IArticleRepo {
+public class ArticleRepo extends DataSourceHandler<ArticleEntity, String> implements IArticleRepo {
 
     public ArticleRepo(ArticleDataRepo repo) { super(repo); }
 

@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TimedScraper {
     private final INewsParamRepo repo;
-    private final BotController bot;
+    private final BigScrape bot;
 
-    private TimedScraper (INewsParamRepo repo, BotController bot) {
+    private TimedScraper (INewsParamRepo repo, BigScrape bot) {
         this.repo = repo;
         this.bot = bot;
     }

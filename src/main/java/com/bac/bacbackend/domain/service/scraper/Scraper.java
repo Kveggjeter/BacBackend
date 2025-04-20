@@ -16,14 +16,16 @@ public class Scraper extends Decomp {
     private final String command = StringResource.COMMAND.getValue();
     private final Regex regex;
     private final INewsParamRepo nRepo;
+    private final IFailedRepo fRepo;
 
-    public Scraper(IArticleRepo repo, IChrome browser, ICrawler cr, IOpenAi ai, INewsParamRepo nRepo, Regex regex) {
+    public Scraper(IArticleRepo repo, IChrome browser, ICrawler cr, IOpenAi ai, INewsParamRepo nRepo, Regex regex, IFailedRepo fRepo) {
         super(repo);
         this.browser = browser;
         this.cr = cr;
         this.ai = ai;
         this.nRepo = nRepo;
         this.regex = regex;
+        this.fRepo = fRepo;
     }
 
     public void start(ArticleData a, int n) {
@@ -80,6 +82,7 @@ public class Scraper extends Decomp {
 
         } catch (Exception e) {
             System.err.println("[" + getName() + "] Failed to extract info from: " + sc.getUrl() + ": " + e.getMessage());
+            fRepo.adder(sc.getUrl());
             throw e;
         } finally {
             try {

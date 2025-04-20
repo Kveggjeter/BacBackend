@@ -2,11 +2,8 @@ package com.bac.bacbackend.data.service.webdriver;
 
 import com.bac.bacbackend.data.repository.browser.Browser;
 import com.bac.bacbackend.domain.port.ICrawler;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -29,12 +26,13 @@ public class Crawler implements ICrawler {
         return vars(s, e -> e.getAttribute(t));
     }
 
-    public String txtValue(String s) {
-        return getElement(s).getText();
+    public String txtValue(String select) {
+        return retry(select, s -> getElement(s).getText());
     }
 
-    public String attValue(String s) {
-        return getElement(s).getAttribute("href");
+    public String attValue(String select) {
+        return retry(select, s -> getElement(s).getAttribute("href"));
+
     }
 
     public String redo(String s) {
@@ -43,6 +41,18 @@ public class Crawler implements ICrawler {
 
     private void getDriver() {
         driver = br.getDriver();
+    }
+
+    private String retry(String s, Function<String, String> f) {
+        int count = 3;
+        do {
+            try {
+                return f.apply(s);
+            } catch (StaleElementReferenceException e) {
+                count--;
+            }
+        }  while (count != 3 && count >= 0) ;
+        throw new NoSuchElementException(s);
     }
 
     private List<String> vars(String s, Function<WebElement, String> f) {
@@ -84,3 +94,34 @@ public class Crawler implements ICrawler {
     }
 
 }
+
+//public String values(String attr, String selector) {
+//    int retries = 3;
+//    while (retries-- > 0) {
+//        try {
+//            List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+//            if (index >= elements.size()) return null;
+//            return elements.get(index).getAttribute(attr);
+//        } catch (StaleElementReferenceException e) {
+//            // DOM har endret seg – prøv på nytt
+//        }
+//    }
+//    throw new RuntimeException("Kunne ikke hente elementet etter flere forsøk");
+//}
+
+//public interface CheckSupp<T> {
+//    T get() throws StaleElementReferenceException;
+//}
+//
+//public static <T> T retry (CheckSupp<T> supp) throws StaleElementReferenceException {
+//    StaleElementReferenceException last = null;
+//
+//    for (int i = 0; i < 3; i++) {
+//        try {
+//            return supp.get();
+//        } catch (StaleElementReferenceException e) {
+//            last = e;
+//        }
+//    }
+//    throw last;
+//}

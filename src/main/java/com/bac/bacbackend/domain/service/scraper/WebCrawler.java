@@ -2,10 +2,7 @@ package com.bac.bacbackend.domain.service.scraper;
 
 import com.bac.bacbackend.domain.model.scraper.ArticleData;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
-import com.bac.bacbackend.domain.port.IChrome;
-import com.bac.bacbackend.domain.port.INewsParamRepo;
-import com.bac.bacbackend.domain.port.IArticleRepo;
-import com.bac.bacbackend.domain.port.ICrawler;
+import com.bac.bacbackend.domain.port.*;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -15,6 +12,7 @@ public class WebCrawler extends Spider<ArticleData> {
 
     private final INewsParamRepo nRepo;
     private final IArticleRepo repo;
+    private final IFailedRepo fRepo;
     private ScrapeProps sp;
 
     private String txtLocator;
@@ -22,10 +20,11 @@ public class WebCrawler extends Spider<ArticleData> {
     private String imgHref;
 
 
-    public WebCrawler(IArticleRepo repo, ICrawler cr, IChrome browser, INewsParamRepo nRepo) {
+    public WebCrawler(IArticleRepo repo, ICrawler cr, IChrome browser, INewsParamRepo nRepo, IFailedRepo fRepo) {
         super(browser, cr);
         this.nRepo = nRepo;
         this.repo = repo;
+        this.fRepo = fRepo;
     }
 
     public List<ArticleData> crawl(int n, int max) {
@@ -48,9 +47,14 @@ public class WebCrawler extends Spider<ArticleData> {
             List<String> imgUrl = cr.values(imgLocator, imgHref);
             if (max > urls.size()) max = urls.size();
 
+            int maxListSize;
+            if (urls.size() > imgUrl.size()) maxListSize = imgUrl.size();
+            else if (urls.size() < imgUrl.size()) maxListSize = max;
+            else maxListSize = urls.size();
+
             int count = 0;
             int i = 0;
-            while (count < max) {
+            while (count < max && i < maxListSize) {
                 System.out.println("Count: " + count);
                 System.out.println("Iteration: " + i);
                 if(i > urls.size()) return;
@@ -68,6 +72,7 @@ public class WebCrawler extends Spider<ArticleData> {
 
     private boolean addArticle(String url, String imgUrl) {
         if(url != null && !repo.exists(url)
+                && !fRepo.exists(url)
                 && !list.contains(new ArticleData(url, imgUrl))) {
             list.add(new ArticleData(url, imgUrl));
             System.out.println("Fetched article #" + list.size() + ": " + url);
