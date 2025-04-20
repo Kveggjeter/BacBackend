@@ -4,8 +4,7 @@ import com.bac.bacbackend.domain.model.scraper.ArticleData;
 import com.bac.bacbackend.domain.service.scraper.Scraper;
 import com.bac.bacbackend.domain.service.scraper.WebCrawler;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +14,7 @@ public class BotController {
 
     private final Scraper scraper;
     private final WebCrawler crawler;
-    private final int threadNumber = 5;
+    private final int threadNumber = 3;
 
     public BotController(Scraper scraper, WebCrawler crawler) {
         this.scraper = scraper;
@@ -31,7 +30,7 @@ public class BotController {
         ExecutorService pool = null;
         try {
              pool = Executors.newFixedThreadPool(threadNumber);
-             ArrayList<ArticleData> articles = crawler.crawl(n, maxNum);
+             List<ArticleData> articles = crawler.crawl(n, maxNum);
              System.out.println("Sending articles to scraper...");
 
              for (ArticleData a : articles) {

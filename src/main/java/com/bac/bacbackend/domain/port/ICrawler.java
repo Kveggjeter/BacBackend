@@ -1,8 +1,11 @@
 package com.bac.bacbackend.domain.port;
 
+import java.util.List;
+
 public interface ICrawler {
-    String values(String s, String t);
-    String value(String s);
+    List<String> values(String s, String t);
+    List<String> values(String s);
+    String attValue(String s);
+    String txtValue(String s);
     String redo(String s);
-    void content(int n);
 }

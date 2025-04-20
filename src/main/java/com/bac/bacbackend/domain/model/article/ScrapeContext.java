@@ -1,6 +1,5 @@
-package com.bac.bacbackend.domain.service.scraper;
+package com.bac.bacbackend.domain.model.article;
 
-import com.bac.bacbackend.domain.model.article.Article;
 import com.bac.bacbackend.domain.model.scraper.ArticleData;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
 import lombok.Getter;

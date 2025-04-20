@@ -3,12 +3,9 @@ package com.bac.bacbackend.data.repository.scraper;
 import com.bac.bacbackend.data.model.scraper.NewsParamEntity;
 import com.bac.bacbackend.data.repository.common.DataSourceHandler;
 import com.bac.bacbackend.domain.common.DataMapper;
-import com.bac.bacbackend.domain.model.article.Article;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Brigde between websource and the scraper functionality. Might even drive this

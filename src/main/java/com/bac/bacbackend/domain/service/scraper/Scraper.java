@@ -1,6 +1,7 @@
 package com.bac.bacbackend.domain.service.scraper;
 
 import com.bac.bacbackend.domain.common.Regex;
+import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.model.scraper.ArticleData;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
 import com.bac.bacbackend.domain.port.*;
@@ -15,7 +16,6 @@ public class Scraper extends Decomp {
     private final String command = StringResource.COMMAND.getValue();
     private final Regex regex;
     private final INewsParamRepo nRepo;
-
 
     public Scraper(IArticleRepo repo, IChrome browser, ICrawler cr, IOpenAi ai, INewsParamRepo nRepo, Regex regex) {
         super(repo);
@@ -32,24 +32,30 @@ public class Scraper extends Decomp {
     }
 
     @Override
-    protected void doScrape(ScrapeContext sc) {
+    protected boolean doScrape(ScrapeContext sc) {
 
         try {
             String threadName = getName();
             browser.start(sc.getUrl());
 
             if(interruptCheck(threadName)) {
-                return;
+                return false;
             }
 
-            sc.setTitle(cr.value(sc.getSp().title()));
-            sc.setSummary(cr.value(sc.getSp().sum()));
-            sumHandler(sc.getSummary());
+            sc.setTitle(cr.txtValue(sc.getSp().title()));
+            sc.setSummary(cr.txtValue(sc.getSp().sum()));
+            sc.setSummary(sumHandler(sc.getSummary()));
 
             System.out.println("[" + threadName + "] title: "   + sc.getTitle());
             System.out.println("[" + threadName + "] summary: " + sc.getSummary());
 
-            String[] res = ai.prompt(command, sc.getTitle() + " " + sc.getSummary()).split("/");
+            String[] res;
+            int count = 0;
+            do {
+                res = ai.prompt(command, sc.getTitle() + " " + sc.getSummary()).split("/");
+                count++;
+            }while(res.length != 6 || count > 3);
+
             if (res.length == 6) {
                 sc.setCity(res[0]);
                 sc.setCountry(res[1]);
@@ -60,7 +66,7 @@ public class Scraper extends Decomp {
             }
             else {
                 System.err.println("[" + threadName + "] Prompt failed, AI returned " + res.length + " variables instead of prompted 6");
-                return;
+                return false;
             }
 
             sc.setSourceName(regex.urlName(sc.getUrl()));
@@ -82,27 +88,18 @@ public class Scraper extends Decomp {
                 System.err.println("[" + getName() + "] Failed to close browser: " + e.getMessage());
             }
         }
+        return true;
     }
 
-    private String getName() {
-        return Thread.currentThread().getName();
-    }
 
-    private boolean interruptCheck(String s) {
-        if(Thread.currentThread().isInterrupted()) {
-            System.err.println("[" + s + "] failed fetching");
-            return true;
-        }
-        return false;
-    }
 
-    private void sumHandler(String s) {
+    private String sumHandler(String s) {
         if (s == null) {
-            s = cr.value("p");
+            s = cr.txtValue("p");
             if (s == null) {
                 System.err.println("[" + getName() + "] No summary found");
             }
-        } else if (s.length() > 400) s = s.substring(0, 400) + "...";
+        }  if (s.length() > 400) s = s.substring(0, 400) + "...";
+        return s;
     }
-
 }

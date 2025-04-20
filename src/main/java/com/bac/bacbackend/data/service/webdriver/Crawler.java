@@ -6,13 +6,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Component
-public final class Crawler implements ICrawler {
+public class Crawler implements ICrawler {
 
-    private String str;
-    private int index;
     private WebDriver driver;
     private final Browser br;
 
@@ -20,42 +21,45 @@ public final class Crawler implements ICrawler {
         this.br = br;
     }
 
-    public void content(int n) {
-        index = n;
+    public List<String> values(String s) {
+        return vars(s, e-> e.getAttribute("href"));
     }
 
-    public String values(String s, String t) {
-        getDriver();
-        setElement(t);
-        List<WebElement> e = getElements(str);
-        return e.get(index).getAttribute(s);
+    public List<String> values(String s, String t) {
+        return vars(s, e -> e.getAttribute(t));
     }
 
-    public String value(String s) {
-        getDriver();
-        WebElement e = getElement(s);
-        return e.getText();
+    public String txtValue(String s) {
+        return getElement(s).getText();
+    }
+
+    public String attValue(String s) {
+        return getElement(s).getAttribute("href");
     }
 
     public String redo(String s) {
-        getDriver();
-        WebElement e = getElement(s);
-        return e.getAttribute("src");
-    }
-
-    private void setElement(String s) {
-        str = s;
+        return getElement(s).getAttribute("src");
     }
 
     private void getDriver() {
         driver = br.getDriver();
     }
 
+    private List<String> vars(String s, Function<WebElement, String> f) {
+        List<String> list = new ArrayList<>();
+        for (WebElement e : getElements(s)) {
+            list.add(f.apply(e));
+        }
+        return list;
+    }
+
     private WebElement getElement(String s) {
+        getDriver();
         return driver.findElement(By.cssSelector(s));
     }
 
     private List<WebElement> getElements(String s) {
+        getDriver();
         return driver.findElements(By.cssSelector(s));
     }
 
