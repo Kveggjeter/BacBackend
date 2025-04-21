@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Postgres entity for the news sources
+ */
 @Getter
 @Setter
 @Data

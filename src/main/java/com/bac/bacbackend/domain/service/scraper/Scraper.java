@@ -1,24 +1,26 @@
 package com.bac.bacbackend.domain.service.scraper;
 
+import com.bac.bacbackend.domain.common.Boundaries;
 import com.bac.bacbackend.domain.common.Regex;
+import com.bac.bacbackend.domain.common.StringResource;
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
-import com.bac.bacbackend.domain.model.scraper.ArticleData;
+import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
 import com.bac.bacbackend.domain.port.*;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Scraper extends Decomp {
+public class Scraper extends ScraperSetup {
 
     private final IChrome browser;
-    private final ICrawler cr;
+    private final IWebSelectors cr;
     private final IOpenAi ai;
     private final String command = StringResource.COMMAND.getValue();
     private final Regex regex;
     private final INewsParamRepo nRepo;
     private final IFailedRepo fRepo;
 
-    public Scraper(IArticleRepo repo, IChrome browser, ICrawler cr, IOpenAi ai, INewsParamRepo nRepo, Regex regex, IFailedRepo fRepo) {
+    public Scraper(IArticleRepo repo, IChrome browser, IWebSelectors cr, IOpenAi ai, INewsParamRepo nRepo, Regex regex, IFailedRepo fRepo) {
         super(repo);
         this.browser = browser;
         this.cr = cr;
@@ -28,61 +30,64 @@ public class Scraper extends Decomp {
         this.fRepo = fRepo;
     }
 
-    public void start(ArticleData a, int n) {
+    public void start(ArticleUrls a, int n) {
         ScrapeProps sp = nRepo.select(n);
         execute(a, sp);
     }
 
     @Override
-    protected boolean doScrape(ScrapeContext sc) {
+    protected boolean doScrape(ScrapeContext scrapeContext) {
+        Boundaries boundaries = new Boundaries();
 
         try {
             String threadName = getName();
-            browser.start(sc.getUrl());
+            browser.start(scrapeContext.getUrl());
 
             if(interruptCheck(threadName)) {
                 return false;
             }
 
-            sc.setTitle(cr.txtValue(sc.getSp().title()));
-            sc.setSummary(cr.txtValue(sc.getSp().sum()));
-            sc.setSummary(sumHandler(sc.getSummary()));
+            scrapeContext.setTitle(cr.txtValue(scrapeContext.getSp().title()));
+            scrapeContext.setSummary(cr.txtValue(scrapeContext.getSp().sum()));
+            scrapeContext.setSummary(sumHandler(scrapeContext.getSummary()));
 
-            System.out.println("[" + threadName + "] title: "   + sc.getTitle());
-            System.out.println("[" + threadName + "] summary: " + sc.getSummary());
+            System.out.println("[" + threadName + "] title: "   + scrapeContext.getTitle());
+            System.out.println("[" + threadName + "] summary: " + scrapeContext.getSummary());
 
             String[] res;
             int count = 0;
+            boolean check;
             do {
-                res = ai.prompt(command, sc.getTitle() + " " + sc.getSummary()).split("/");
+                res = ai.prompt(command, scrapeContext.getTitle() + " " + scrapeContext.getSummary()).split("/");
+                check = boundaries.coordinatesChecker(res);
                 count++;
-            }while(res.length != 6 || count > 3);
+            }while(res.length != 6 || count > 3 || !check);
 
             if (res.length == 6) {
-                sc.setCity(res[0]);
-                sc.setCountry(res[1]);
-                sc.setContinent(res[2]);
-                sc.setCategory(res[3]);
-                sc.setX(res[4]);
-                sc.setY(res[5]);
+                scrapeContext.setCity(res[0]);
+                scrapeContext.setCountry(res[1]);
+                scrapeContext.setContinent(res[2]);
+                scrapeContext.setCategory(res[3]);
+                scrapeContext.setX(res[4]);
+                scrapeContext.setY(res[5]);
             }
             else {
                 System.err.println("[" + threadName + "] Prompt failed, AI returned " + res.length + " variables instead of prompted 6");
                 return false;
             }
 
-            sc.setSourceName(regex.urlName(sc.getUrl()));
+            scrapeContext.setSourceName(regex.urlName(scrapeContext.getUrl()));
 
-            if (sc.getImgUrl() != null) {
-                sc.setImgUrl(regex.imageSrc(sc.getImgUrl()));
+            if (scrapeContext.getImgUrl() != null) {
+                scrapeContext.setImgUrl(regex.imageSrc(scrapeContext.getImgUrl()));
             } else {
-                sc.setImgUrl(cr.redo("img") != null ? regex.imageSrc(cr.redo("img")) : "NO_IMAGE");
+                scrapeContext.setImgUrl(cr.redo("img") != null ? regex.imageSrc(cr.redo("img")) : "NO_IMAGE");
             }
 
 
         } catch (Exception e) {
-            System.err.println("[" + getName() + "] Failed to extract info from: " + sc.getUrl() + ": " + e.getMessage());
-            fRepo.adder(sc.getUrl());
+            System.err.println("[" + getName() + "] Failed to extract info from: " + scrapeContext.getUrl() + ": " + e.getMessage());
+            fRepo.addToFail(scrapeContext.getUrl());
             throw e;
         } finally {
             try {

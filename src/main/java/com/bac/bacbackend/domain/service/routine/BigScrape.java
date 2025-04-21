@@ -18,7 +18,7 @@ public final class BigScrape extends Bot {
     }
 
     @Override
-    protected int sleepTime() {
+    protected int sleepTimeMilliseconds() {
         return 0;
     }
 
@@ -28,7 +28,7 @@ public final class BigScrape extends Bot {
     }
 
     @Override
-    protected int waitTime() {
+    protected int waitTimeSeconds() {
         return 120;
     }
 }

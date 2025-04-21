@@ -12,18 +12,19 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TimedScraper {
     private final INewsParamRepo repo;
-    private final BigScrape bot;
+    private final BigScrape bigScrape;
 
-    private TimedScraper (INewsParamRepo repo, BigScrape bot) {
+    private TimedScraper (INewsParamRepo repo, BigScrape bigScrape) {
         this.repo = repo;
-        this.bot = bot;
+        this.bigScrape = bigScrape;
     }
+
     /**
      * Translater to save some time
      * https://crontab.guru/
      */
     @Scheduled (cron = "0 0 0,6 * * *")
     public void scrape() {
-        bot.start(repo.getCount(), 5);
+        bigScrape.start(repo.sumOfAllSources(), 5);
     }
 }

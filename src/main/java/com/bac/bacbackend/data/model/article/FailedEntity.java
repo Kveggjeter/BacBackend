@@ -5,6 +5,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+/**
+ * Redis entity for urls that the scraper has failed on multiple times.
+ */
 @Getter
 @Setter
 @RedisHash(value = "Failed", timeToLive = 172800)

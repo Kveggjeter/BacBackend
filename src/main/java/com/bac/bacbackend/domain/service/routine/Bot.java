@@ -1,10 +1,14 @@
 package com.bac.bacbackend.domain.service.routine;
 
-import com.bac.bacbackend.domain.model.scraper.ArticleData;
+import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.service.scraper.Scraper;
 import com.bac.bacbackend.domain.service.scraper.WebCrawler;
 import java.util.List;
 
+/**
+ * Base class for bot-controllers. All bots collects and saves data to later be saved as an Article.
+ * Therefor all bots uses the same initialization and benefit from having one common parent.
+ */
 public abstract class Bot extends MultiThreading {
 
     private final WebCrawler crawler;
@@ -15,28 +19,35 @@ public abstract class Bot extends MultiThreading {
         this.crawler = crawler;
     }
 
-    protected void doStart(int n, int max) {
-        if (n < 0) return;
+    /**
+     * Recursive method for crawling and scraping the given articles. It being recursive allows for
+     * easier throwing and continuing even when some parts fail (a sort of poor-mans backtracking).
+     * The stack is not cause any trouble.
+     *
+     * @param propertyIndex the index of what webelement to be used for scraping and crawling
+     * @param maxArticles max amount of articles to be scraped
+     */
+    protected void doStart(int propertyIndex, int maxArticles) {
+        if (propertyIndex < 0) return;
 
-        pool = null;
+        threadPool = null;
         try {
-            threadPool();
-            List<ArticleData> article = crawler.crawl(n, max);
+            createThreadPool();
+            List<ArticleUrls> articleUrls = crawler.crawl(propertyIndex, maxArticles);
 
-            if (article == null || article.isEmpty())
+            if (articleUrls == null || articleUrls.isEmpty())
                 System.out.println("Nothing new to add, continuing..");
             else {
-                System.out.println("Adding " + article.size() + " articles to be scraped..");
-                for (ArticleData a : article) {
-                    pool.submit(() -> scraper.start(a, n));
+                System.out.println("Adding " + articleUrls.size() + " articles to be scraped..");
+                for (ArticleUrls a : articleUrls) {
+                    threadPool.submit(() -> scraper.start(a, propertyIndex));
                 }
             }
-            stop(pool);
+            stop(threadPool);
         } finally {
             shutdown();
         }
         sleep();
-        doStart(n - 1, max);
+        doStart(propertyIndex - 1, maxArticles);
     }
-
 }

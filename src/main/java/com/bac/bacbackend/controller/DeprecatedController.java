@@ -9,7 +9,7 @@ import com.bac.bacbackend.domain.service.scraper.WebCrawler;
 import com.bac.bacbackend.data.repository.scraper.NewsParamRepo;
 //import com.bac.bacbackend.data.scraper.Bot;
 import com.bac.bacbackend.data.repository.article.ArticleDataRepo;
-import com.bac.bacbackend.domain.service.scraper.StringResource;
+import com.bac.bacbackend.domain.common.StringResource;
 import com.bac.bacbackend.data.service.decomp.OpenAi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;

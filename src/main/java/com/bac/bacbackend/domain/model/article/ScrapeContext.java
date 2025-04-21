@@ -1,6 +1,6 @@
 package com.bac.bacbackend.domain.model.article;
 
-import com.bac.bacbackend.domain.model.scraper.ArticleData;
+import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ public class ScrapeContext {
     private String y;
     private String sourceName;
 
-    public ScrapeContext(ArticleData data, ScrapeProps sp) {
+    public ScrapeContext(ArticleUrls data, ScrapeProps sp) {
         this.url    = data.articleUrl();
         this.imgUrl = data.imgUrl();
         this.sp  = sp;
