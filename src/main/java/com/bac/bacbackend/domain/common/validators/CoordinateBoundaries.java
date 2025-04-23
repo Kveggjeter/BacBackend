@@ -1,5 +1,8 @@
-package com.bac.bacbackend.domain.common;
+package com.bac.bacbackend.domain.common.validators;
 
+/**
+ * Static boundaries for coordinates
+ */
 public enum CoordinateBoundaries {
     EUROPE (80f, 33f, 55f, 29f),
     ASIA (82f, -10f,  26f, -171f),

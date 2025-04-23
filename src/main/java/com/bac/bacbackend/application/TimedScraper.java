@@ -1,5 +1,6 @@
-package com.bac.bacbackend.domain.service.routine;
+package com.bac.bacbackend.application;
 
+import com.bac.bacbackend.application.routine.BigScrape;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

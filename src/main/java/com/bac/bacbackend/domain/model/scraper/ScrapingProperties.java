@@ -1,6 +1,6 @@
 package com.bac.bacbackend.domain.model.scraper;
 
-public record ScrapeProps(
+public record ScrapingProperties(
         String url,
         String txtLocator,
         String txtHref,

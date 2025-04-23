@@ -1,7 +1,7 @@
-package com.bac.bacbackend.domain.service.routine;
+package com.bac.bacbackend.application.routine;
 
-import com.bac.bacbackend.domain.service.scraper.Scraper;
-import com.bac.bacbackend.domain.service.scraper.WebCrawler;
+import com.bac.bacbackend.application.routine.crawling.WebCrawler;
+import com.bac.bacbackend.application.routine.scraping.Scraper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,10 +11,15 @@ public final class BigScrape extends Bot {
         super(scraper, crawler);
     }
 
-    public void start(int n, int maxNum) {
+    public void start(int propertyIndex, int maxArticles) {
         System.out.println("Starting full scraping");
-        doStart(n, maxNum);
+        doStart(propertyIndex, maxArticles);
         System.out.println("Full scraping complete.");
+    }
+
+    @Override
+    protected int waitTimeSeconds() {
+        return 120;
     }
 
     @Override
@@ -25,10 +30,5 @@ public final class BigScrape extends Bot {
     @Override
     protected int threadNumber() {
         return 3;
-    }
-
-    @Override
-    protected int waitTimeSeconds() {
-        return 120;
     }
 }

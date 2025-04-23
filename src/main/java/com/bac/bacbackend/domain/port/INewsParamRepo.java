@@ -1,8 +1,8 @@
 package com.bac.bacbackend.domain.port;
 
-import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
+import com.bac.bacbackend.domain.model.scraper.ScrapingProperties;
 
 public interface INewsParamRepo {
-    ScrapeProps select(int n);
+    ScrapingProperties select(int n);
     int sumOfAllSources();
 }

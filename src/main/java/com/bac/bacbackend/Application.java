@@ -1,11 +1,7 @@
 package com.bac.bacbackend;
 
-import com.bac.bacbackend.domain.port.INewsParamRepo;
-import com.bac.bacbackend.domain.service.routine.BigScrape;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -41,12 +37,12 @@ public class Application {
 	}
 
 
-	@Bean
-	CommandLineRunner runScraper(BigScrape bigScrape, INewsParamRepo newsRepo) {
-		return args -> {
-			bigScrape.start(newsRepo.sumOfAllSources(), 10);
-		};
-	}
+//	@Bean
+//	CommandLineRunner runScraper(BigScrape bigScrape, INewsParamRepo newsRepo) {
+//		return args -> {
+//			bigScrape.start(newsRepo.sumOfAllSources(), 10);
+//		};
+//	}
 
 }
 

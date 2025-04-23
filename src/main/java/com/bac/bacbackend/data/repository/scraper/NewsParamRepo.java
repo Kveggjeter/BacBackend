@@ -2,7 +2,7 @@ package com.bac.bacbackend.data.repository.scraper;
 
 import com.bac.bacbackend.data.model.scraper.NewsParamEntity;
 import com.bac.bacbackend.data.repository.common.DataSourceHandler;
-import com.bac.bacbackend.domain.model.scraper.ScrapeProps;
+import com.bac.bacbackend.domain.model.scraper.ScrapingProperties;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class NewsParamRepo extends DataSourceHandler<NewsParamEntity, String> im
      * @return returns the scraper properties, readable from the domain class
      */
     @Override
-    public ScrapeProps select(int propertyIndex) {
+    public ScrapingProperties select(int propertyIndex) {
         NewsParamEntity entity = get(propertyIndex);
         return toDomain(entity);
     }
@@ -36,8 +36,8 @@ public class NewsParamRepo extends DataSourceHandler<NewsParamEntity, String> im
      * @param entity the entity for the news-parameters
      * @return scraper properties usable to the domain
      */
-    private ScrapeProps toDomain(NewsParamEntity entity) {
-        return new ScrapeProps(
+    private ScrapingProperties toDomain(NewsParamEntity entity) {
+        return new ScrapingProperties(
                 entity.getUrl(),
                 entity.getTxtLocator(),
                 entity.getTxtHref(),

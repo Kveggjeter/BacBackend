@@ -108,8 +108,10 @@ public class WebSelectors implements IWebSelectors {
                 count--;
             }
         } while (count != 3 && count >= 0);
-        throw new NoSuchElementException(select);
+        return null;
     }
+
+
 
     /**
      * Generic method for getting values to a list. Lambda expressions needs to be used
