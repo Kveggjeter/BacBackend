@@ -36,6 +36,14 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+
+//	@Bean
+//	CommandLineRunner runScraper(BigScrape bigScrape, INewsParamRepo newsRepo) {
+//		return args -> {
+//			bigScrape.start(newsRepo.sumOfAllSources(), 10);
+//		};
+//	}
+
 }
 
 /**
