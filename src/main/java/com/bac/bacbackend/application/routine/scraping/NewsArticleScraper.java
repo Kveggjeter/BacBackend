@@ -1,6 +1,6 @@
 package com.bac.bacbackend.application.routine.scraping;
 
-import com.bac.bacbackend.domain.common.ContentAnalyzis;
+import com.bac.bacbackend.domain.common.ContentAnalysis;
 import com.bac.bacbackend.domain.common.validators.SummaryValidator;
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
@@ -19,16 +19,16 @@ import org.springframework.stereotype.Component;
 public class NewsArticleScraper implements Scraper {
     private final IWebSelectors webSelectors;
     private final SummaryValidator summaryValidator;
-    private final ContentAnalyzis contentAnalyzis;
+    private final ContentAnalysis contentAnalysis;
     private final INewsParamRepo repository;
     private final IChrome browser;
     private final IFailedRepo failedRepo;
     private final SaveScrapedArticle saveScrapedArticle;
 
-    public NewsArticleScraper(IWebSelectors webSelectors, SummaryValidator summaryValidator, ContentAnalyzis contentAnalyzis, INewsParamRepo repository, IChrome browser, IFailedRepo failedRepo, SaveScrapedArticle saveScrapedArticle) {
+    public NewsArticleScraper(IWebSelectors webSelectors, SummaryValidator summaryValidator, ContentAnalysis contentAnalysis, INewsParamRepo repository, IChrome browser, IFailedRepo failedRepo, SaveScrapedArticle saveScrapedArticle) {
         this.webSelectors = webSelectors;
         this.summaryValidator = summaryValidator;
-        this.contentAnalyzis = contentAnalyzis;
+        this.contentAnalysis = contentAnalysis;
         this.repository = repository;
         this.browser = browser;
         this.failedRepo = failedRepo;
@@ -39,7 +39,7 @@ public class NewsArticleScraper implements Scraper {
     public void scrapeWebsite(ArticleUrls articleUrls, int propertyIndex) {
         ScrapingProperties scrapingProperties = repository.select(propertyIndex);
         ScrapeContext scrapeContext = new ScrapeContext(articleUrls, scrapingProperties);
-        ScrapingStrategy scrapingStrategy = new ArticleScrapingStrategy(webSelectors, summaryValidator, contentAnalyzis);
+        ScrapingStrategy scrapingStrategy = new ArticleScrapingStrategy(webSelectors, summaryValidator, contentAnalysis);
         Scraping scraping = new Scraping(browser, scrapingStrategy, failedRepo, saveScrapedArticle);
 
         scraping.scrape(scrapeContext);

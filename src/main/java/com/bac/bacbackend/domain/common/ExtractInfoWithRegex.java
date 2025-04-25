@@ -1,5 +1,6 @@
 package com.bac.bacbackend.domain.common;
 
+import com.bac.bacbackend.domain.common.exceptions.RegexMatchResultException;
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.port.IWebSelectors;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ public class ExtractInfoWithRegex extends Regex {
         this.webSelectors = webSelectors;
     }
 
-    public String getNameOfUrlSource(ScrapeContext scrapeContext) {
+    public String getNameOfUrlSource(ScrapeContext scrapeContext) throws RegexMatchResultException {
         return urlName(scrapeContext.getArticleUrl());
     }
 

@@ -26,22 +26,14 @@ public class ArticleUrlStrategy implements CrawlingStrategy<ArticleUrls> {
                 scrapingProperties.imgHref());
 
         if (maxUrlsToCrawl > articleUrls.size()) maxUrlsToCrawl = articleUrls.size();
+        int maxListSize = Math.min(articleUrls.size(), imgUrls.size());
 
-        int maxListSize = switch (Integer.compare(articleUrls.size(), imgUrls.size())) {
-            case 1 -> imgUrls.size();
-            case -1 -> maxUrlsToCrawl;
-            default -> articleUrls.size();
-        };
 
         int countOfArticlesAdded = 0;
         int i = 0;
         while (countOfArticlesAdded < maxUrlsToCrawl && i < maxListSize) {
             String articleUrl = articleUrls.get(i);
             String imgUrl = imgUrls.get(i);
-            System.out.println("Count: " + countOfArticlesAdded);
-            System.out.println("Iteration: " + i);
-            System.out.println(articleUrl);
-            System.out.println(imgUrl);
             boolean ok = articleUrlValidator.isArticleAlreadyAdded(articleUrl);
             if (ok && !listOfUrlsToBeScraped.contains(new ArticleUrls(articleUrl, imgUrl))) {
                 countOfArticlesAdded++;

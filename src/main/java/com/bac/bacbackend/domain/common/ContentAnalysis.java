@@ -4,6 +4,6 @@ import com.bac.bacbackend.domain.model.article.ScrapeContext;
 
 import java.util.ArrayList;
 
-public interface ContentAnalyzis {
+public interface ContentAnalysis {
     ArrayList<String> analyzeContent(ScrapeContext scrapeContext);
 }
