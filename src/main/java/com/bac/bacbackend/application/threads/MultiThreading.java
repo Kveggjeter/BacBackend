@@ -10,38 +10,14 @@ public abstract class MultiThreading {
 
     public MultiThreading() {}
 
-    /**
-     * For setting a time-limit (seconds) on a thread
-     * @return time for a loose thread to be shutdown
-     */
     protected abstract int waitTimeSeconds();
-
-    /**
-     * For setting a sleep time (milliseconds) before a new iteration (or wherever)
-     * @return a sleep time
-     */
     protected abstract int sleepTimeMilliseconds();
-
-    /**
-     * For setting preferred number of threads. Be cautious with the number, as some recursive
-     * methods quickly can take up a lot of hardware.
-     *
-     * @return number of threads
-     */
     protected abstract int threadNumber();
 
-    /**
-     * For setting up a pool of threads. The Executors and ExecutorsService library
-     * helps the threads to work in parallel with each of their own task, so no one does the
-     * same thing.
-     */
     protected void createThreadPool() {
         threadPool = Executors.newFixedThreadPool(threadNumber());
     }
 
-    /**
-     * Setting a sleep point somewhere in the code.
-     */
     protected void sleep() {
         try {
             Thread.sleep(sleepTimeMilliseconds());
@@ -50,12 +26,6 @@ public abstract class MultiThreading {
         }
     }
 
-    /**
-     * Simple shutdown with a null checker. Only use in combination with stop to ensure
-     * actual shutdowns. Some throws tend to skip shutdowns if not placed correctly,
-     * so I've included this method for good measure. Sprinkling this in-between
-     * throws does not hurt
-     */
     protected void shutdown() {
         if (threadPool != null) threadPool.shutdown();
     }
@@ -64,11 +34,6 @@ public abstract class MultiThreading {
         return Thread.currentThread().getName();
     }
 
-    /**
-     * Method for stopping the thread(pool) after it is no longer needed.
-     *
-     * @param executorService representing the thread pool
-     */
     protected void stop(ExecutorService executorService) {
         executorService.shutdown();
         try {

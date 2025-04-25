@@ -20,14 +20,6 @@ public abstract class Bot extends MultiThreading {
         this.webCrawler = webCrawler;
     }
 
-    /**
-     * Recursive method for crawling and scraping the given articles. It being recursive allows for
-     * easier throwing and continuing even when some parts fail (a sort of poor-mans backtracking).
-     * The stack is not cause any trouble.
-     *
-     * @param propertyIndex the index of what web-element to be used for scraping and crawling
-     * @param maxArticles max amount of articles to be scraped
-     */
     public void doStart(int propertyIndex, int maxArticles) {
         if (propertyIndex < 0) return;
         threadPool = null;

@@ -1,5 +1,6 @@
 package com.bac.bacbackend.data.service.decomp;
 
+import com.bac.bacbackend.domain.common.exceptions.AiPromptException;
 import com.bac.bacbackend.domain.port.IOpenAi;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
@@ -35,8 +36,7 @@ public class OpenAi implements IOpenAi {
                     .orElse("No Response");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new AiPromptException("AI response failed: " + e.getMessage());
         }
     }
 }

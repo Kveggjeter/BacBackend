@@ -4,6 +4,12 @@ import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.port.IChrome;
 import com.bac.bacbackend.domain.port.IFailedRepo;
 
+/**
+ * Responsible for driving the scraping process for a single article
+ * <p>
+ * {@link IChrome} is an interface for the browser we use to automate our scraping with.
+ * to change browser or setting, simply make an own implementation that implements {@link IChrome}
+ */
 public class Scraping {
 
     private final IChrome browser;
@@ -18,26 +24,23 @@ public class Scraping {
         this.saveScrapedArticle = saveScrapedArticle;
     }
 
+    /**
+     * Starts a webdriver session that closes after scraping is done. Adds articles
+     * to Redis. If we fail to collect anything from an article, that article is now considered a
+     * failed article, and will be skipped if encountered again.
+     *
+     * @param scrapeContext data class that defines the scraped properties
+     */
     public void scrape(ScrapeContext scrapeContext) {
         browser.start(scrapeContext.getArticleUrl());
         try {
-            System.out.println("Scraping started, please wait...");
-            if(scrapingStrategy.doScrape(scrapeContext))
-                try {
-                    saveScrapedArticle.save(scrapeContext);
-                    System.out.println("Scraping finished, added: " + scrapeContext.getArticleUrl() + " to Articles");
-                } catch (Exception e) {
-                    System.err.println("Unexpected fault, could not save " + e.getMessage());
-                }
-            else System.err.println("Could not save from: " + scrapeContext.getArticleUrl());
-
-        } catch (Exception e) {
-            System.err.println("Failed to extract info from: "
-                    + scrapeContext.getArticleUrl()
-                    + ": "
-                    + e.getMessage());
-            System.out.println("Adding: " + scrapeContext.getArticleUrl() + " to Failed articles" );
-            failedRepo.addToFail(scrapeContext.getArticleUrl());
+            if(scrapingStrategy.doScrape(scrapeContext)) {
+                saveScrapedArticle.save(scrapeContext);
+                System.out.println("[" + Thread.currentThread().getName() + "]" + " Added article: " +  scrapeContext.getArticleUrl());
+            } else {
+                failedRepo.addToFail(scrapeContext.getArticleUrl());
+                System.err.println("[" + Thread.currentThread().getName() + "]" + " Article failed: " + scrapeContext.getArticleUrl());
+            }
         } finally {
             browser.stop();
         }
