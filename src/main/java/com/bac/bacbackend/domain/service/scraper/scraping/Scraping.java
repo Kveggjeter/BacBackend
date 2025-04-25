@@ -32,8 +32,8 @@ public class Scraping {
      * @param scrapeContext data class that defines the scraped properties
      */
     public void scrape(ScrapeContext scrapeContext) {
-        browser.start(scrapeContext.getArticleUrl());
         try {
+            browser.start(scrapeContext.getArticleUrl());
             if(scrapingStrategy.doScrape(scrapeContext)) {
                 saveScrapedArticle.save(scrapeContext);
                 System.out.println("[" + Thread.currentThread().getName() + "]" + " Added article: " +  scrapeContext.getArticleUrl());
