@@ -64,7 +64,7 @@ public class AnalyzeWithAi implements ContentAnalysis {
         String promptMessage = scrapeContext.getTitle() + " " + scrapeContext.getSummary();
         Boundaries boundaries = new Boundaries();
 
-        for (int attempt = 1; attempt < 3; attempt++) {
+        for (int attempt = 0; attempt < 3; attempt++) {
             String[] promptResult = openAi.prompt(COMMAND, promptMessage).split("/");
             if (promptResult.length == 6 && boundaries.coordinatesChecker(promptResult))
                 return promptResult;
