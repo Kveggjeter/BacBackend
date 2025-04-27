@@ -17,11 +17,7 @@ public abstract class BrowserInstance {
     }
 
     protected WebDriver setDriver() {
-        WebDriver dr = td.get();
-        if (dr == null) {
-            throw new IllegalStateException("Driver not started");
-        }
-        return dr;
+        return td.get();
     }
 
     protected void setStop() {
@@ -32,6 +28,7 @@ public abstract class BrowserInstance {
             } catch (Exception e) {
                 System.err.println("Error quitting driver: " + e);
             } finally {
+                dr.quit();
                 td.remove();
             }
         }

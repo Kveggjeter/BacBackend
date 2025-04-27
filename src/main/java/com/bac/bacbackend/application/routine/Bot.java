@@ -25,15 +25,19 @@ public abstract class Bot extends MultiThreading {
         threadPool = null;
         try {
             createThreadPool();
-            List<ArticleUrls> articleUrls = webCrawler.crawlWebsites(maxArticles, propertyIndex);
-            if (articleUrls == null || articleUrls.isEmpty())
-                System.out.println("[" + getName() + " ] " + "Nothing new to add, continuing..");
-            else {
-                System.out.println("[" + getName() + " ] " + "Adding " + articleUrls.size() + " articles to be scraped..");
-                for (ArticleUrls a : articleUrls) {
-                    threadPool.submit(() -> scraper.scrapeWebsite(a, propertyIndex));
-                    System.out.println("[" + getName() + " ] " + "Scraping: " + a.articleUrl());
+            try {
+                List<ArticleUrls> articleUrls = webCrawler.crawlWebsites(maxArticles, propertyIndex);
+                if (articleUrls == null || articleUrls.isEmpty())
+                    System.out.println("[" + getName() + " ] " + "Nothing new to add, continuing..");
+                else {
+                    System.out.println("[" + getName() + " ] " + "Adding " + articleUrls.size() + " articles to be scraped..");
+                    for (ArticleUrls a : articleUrls) {
+                        threadPool.submit(() -> scraper.scrapeWebsite(a, propertyIndex));
+                        System.out.println("[" + getName() + " ] " + "Scraping: " + a.articleUrl());
+                    }
                 }
+            } catch (Exception e) {
+                System.err.println("[" + getName() + " ] " + "Exception occurred: " + e.getMessage());
             }
             stop(threadPool);
         } finally {

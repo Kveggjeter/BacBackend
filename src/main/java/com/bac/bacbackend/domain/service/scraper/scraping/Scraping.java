@@ -41,7 +41,10 @@ public class Scraping {
                 failedRepo.addToFail(scrapeContext.getArticleUrl());
                 System.err.println("[" + Thread.currentThread().getName() + "]" + " Article failed: " + scrapeContext.getArticleUrl());
             }
-        } finally {
+        } catch (Exception e) {
+            System.err.println("[" + Thread.currentThread().getName() + "]" + " Unexpected error, killing browser instance" + scrapeContext.getArticleUrl());
+        }
+        finally {
             browser.stop();
         }
     }

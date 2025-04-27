@@ -4,7 +4,6 @@ import com.bac.bacbackend.domain.common.validators.ArticleUrlValidator;
 import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.model.scraper.ScrapingProperties;
 import com.bac.bacbackend.domain.port.IWebSelectors;
-
 import java.util.ArrayList;
 import java.util.List;
 
