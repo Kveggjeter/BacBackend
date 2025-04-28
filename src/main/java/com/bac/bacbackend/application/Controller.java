@@ -10,6 +10,7 @@ import com.bac.bacbackend.domain.port.INewsParamRepo;
 import com.bac.bacbackend.domain.port.IScraperObjectRepo;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -51,6 +52,19 @@ public class Controller {
     public List<ArticleUrls> crawl(){
         return newsArticleCrawler.crawlWebsites(1, nRepo.sumOfAllSources());
 
+    }
+
+    @RequestMapping("/country")
+    public int country(@RequestParam String country) {
+        int count = 0;
+        Iterable<Article> articles = aRepo.news();
+        for (Article article : articles) {
+            if (article != null
+                    && article.country() != null
+                    && article.country().equalsIgnoreCase(country))
+                count++;
+        }
+        return count;
     }
 
     @RequestMapping("/news")
