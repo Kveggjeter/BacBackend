@@ -2,6 +2,7 @@ package com.bac.bacbackend.application.routine;
 
 import com.bac.bacbackend.application.routine.crawling.WebCrawler;
 import com.bac.bacbackend.application.routine.scraping.Scraper;
+import com.bac.bacbackend.domain.port.IChrome;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewsPatrol extends Bot {
 
-    public NewsPatrol(Scraper scraper, WebCrawler crawler) {
-        super(scraper, crawler);
+    public NewsPatrol(Scraper scraper, WebCrawler crawler, IChrome browser) {
+        super(scraper, crawler, browser);
     }
 
     /**

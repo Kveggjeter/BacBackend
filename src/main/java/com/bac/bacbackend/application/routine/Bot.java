@@ -4,6 +4,8 @@ import com.bac.bacbackend.application.routine.crawling.WebCrawler;
 import com.bac.bacbackend.application.routine.scraping.Scraper;
 import com.bac.bacbackend.application.threads.MultiThreading;
 import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
+import com.bac.bacbackend.domain.port.IChrome;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,9 @@ public abstract class Bot extends MultiThreading {
     private final Scraper scraper;
     private final WebCrawler webCrawler;
 
-    public Bot(Scraper scraper, WebCrawler webCrawler) {
+
+    public Bot(Scraper scraper, WebCrawler webCrawler, IChrome browser) {
+        super(browser);
         this.scraper = scraper;
         this.webCrawler = webCrawler;
     }

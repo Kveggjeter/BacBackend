@@ -37,7 +37,7 @@ public class Controller {
 
     @RequestMapping("/start")
         public String scrape() {
-            bot.start(nRepo.sumOfAllSources(), 50);
+            bot.start(nRepo.sumOfAllSources(), 20);
             return "Skraping starta";
     }
 

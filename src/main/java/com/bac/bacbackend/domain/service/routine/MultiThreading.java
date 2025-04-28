@@ -1,5 +1,7 @@
 package com.bac.bacbackend.domain.service.routine;
 
+import com.bac.bacbackend.domain.port.IChrome;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +15,11 @@ import java.util.concurrent.TimeUnit;
 public abstract class MultiThreading  {
 
     protected ExecutorService threadPool = null;
+    private final IChrome browser;
 
-    public MultiThreading() {}
+    public MultiThreading(IChrome browser) {
+        this.browser = browser;
+    }
 
     /**
      * For setting a time-limit (seconds) on a thread

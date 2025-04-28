@@ -5,7 +5,7 @@ package com.bac.bacbackend.domain.common.validators;
  */
 public enum CoordinateBoundaries {
     EUROPE (80f, 33f, 55f, 29f),
-    ASIA (82f, -10f,  26f, -171f),
+    ASIA (82f, -10f,  171f, 26f),
     OCEANIA (14f, -67f, 180f,  111f,  -161f,  -180f),
     AFRICA (37f, -37f,  56f,  -26f),
     SOUTH_AMERICA (14f,  -7f, -66f,  -77f),

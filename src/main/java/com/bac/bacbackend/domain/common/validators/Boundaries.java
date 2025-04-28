@@ -10,7 +10,7 @@ public class Boundaries {
         String country = promptResult[1].toLowerCase();
         String continent = (promptResult[2]).toLowerCase();
 
-        CoordinateBoundaries coordinateBoundaries = CoordinateBoundaries.continentCheck(country, continent);
+        CoordinateBoundaries coordinateBoundaries = CoordinateBoundaries.continentCheck(continent, country);
         if (coordinateBoundaries == null) return true;
 
         if (coordinateBoundaries == CoordinateBoundaries.OCEANIA)
