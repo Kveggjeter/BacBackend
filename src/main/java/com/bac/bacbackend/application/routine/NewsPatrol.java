@@ -34,7 +34,7 @@ public class NewsPatrol extends Bot {
     @Override
     protected int sleepTimeMilliseconds() {
         int min = 2000;
-        int max = 15000;
+        int max = 45000;
         int sleep = (int)(Math.random() * (max - min) + min);
         System.out.println("Sleeping for " + sleep + " ms. ");
         return sleep;

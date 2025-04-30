@@ -111,8 +111,6 @@ public class WebSelectors implements IWebSelectors {
         return null;
     }
 
-
-
     /**
      * Generic method for getting values to a list. Lambda expressions needs to be used
      * for inserting if you want to use getText() or getAttribute(). It takes the

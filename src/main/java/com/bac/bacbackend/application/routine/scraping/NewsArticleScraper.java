@@ -43,7 +43,26 @@ public class NewsArticleScraper implements Scraper {
         Scraping scraping = new Scraping(browser, scrapingStrategy, failedRepo, saveScrapedArticle);
 
         scraping.scrape(scrapeContext);
-        }
+    }
+
+    // TEST
+//    public void scrapeWebsite(ArticleUrls articleUrls, int propertyIndex) {
+//        ScrapingProperties scrapingProperties = new ScrapingProperties(
+//                "https://www.france24.com/en/europe/",
+//                ".article__title a",
+//                "href",
+//                ".m-item-list-article__wrapper picture",
+//                "innerHTML",
+//                "h1",
+//                "p.t-content__chapo"
+//        );
+//        ScrapeContext scrapeContext = new ScrapeContext(articleUrls, scrapingProperties);
+//        ScrapingStrategy scrapingStrategy = new ArticleScrapingStrategy(webSelectors, summaryValidator, contentAnalysis);
+//        Scraping scraping = new Scraping(browser, scrapingStrategy, failedRepo, saveScrapedArticle);
+//
+//        scraping.scrape(scrapeContext);
+//    }
+
 
     }
 

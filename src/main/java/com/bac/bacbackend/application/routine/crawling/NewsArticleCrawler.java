@@ -38,4 +38,22 @@ public class NewsArticleCrawler implements WebCrawler {
 
         return crawler.crawl(scrapingProperties, maxUrlsToCrawl);
     }
+
+     //TEST
+//    public List<ArticleUrls> crawlWebsites(int maxUrlsToCrawl, int propertyIndex) {
+//        ScrapingProperties scrapingProperties = new ScrapingProperties(
+//                "https://allafrica.com/",
+//                ".foundation a",
+//                "href",
+//                ".img-responsive",
+//                "src",
+//                ".topic h1",
+//                ".topic p"
+//        );
+//        CrawlingStrategy<ArticleUrls> crawlingStrategy = new ArticleUrlStrategy(webSelectors, articleUrlValidator);
+//        Crawler<ArticleUrls> crawler = new Crawler<>(browser, crawlingStrategy);
+//
+//        return crawler.crawl(scrapingProperties, maxUrlsToCrawl);
+//    }
+
 }

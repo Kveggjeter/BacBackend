@@ -32,11 +32,13 @@ public class ArticleUrlStrategy implements CrawlingStrategy<ArticleUrls> {
         int i = 0;
         while (countOfArticlesAdded < maxUrlsToCrawl && i < maxListSize) {
             String articleUrl = articleUrls.get(i);
+            System.out.println("Count:" + countOfArticlesAdded + " out of " + maxUrlsToCrawl + "." );
             String imgUrl = imgUrls.get(i);
             boolean ok = articleUrlValidator.isArticleAlreadyAdded(articleUrl);
             if (ok && !listOfUrlsToBeScraped.contains(new ArticleUrls(articleUrl, imgUrl))) {
                 countOfArticlesAdded++;
                 listOfUrlsToBeScraped.add(new ArticleUrls(articleUrl, imgUrl));
+                System.out.println("Added " + articleUrl + " and this image." + imgUrl + ".");
             }
             i++;
         }
