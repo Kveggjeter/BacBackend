@@ -8,7 +8,7 @@ public enum CoordinateBoundaries {
     ASIA (82f, -10f,  171f, 26f),
     OCEANIA (14f, -67f, 180f,  111f,  -161f,  -180f),
     AFRICA (37f, -37f,  56f,  -26f),
-    SOUTH_AMERICA (14f,  -7f, -66f,  -77f),
+    SOUTH_AMERICA (31f,  -56f, -34f,  -91f),
     NORTH_AMERICA (84f,   7f, -52f, -167f),
     AUSTRALIA (-9f, -44f, 155f,  112f);
 

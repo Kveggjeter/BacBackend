@@ -30,6 +30,6 @@ public final class BigScrape extends Bot {
 
     @Override
     protected int threadNumber() {
-        return 3;
+        return 5;
     }
 }
