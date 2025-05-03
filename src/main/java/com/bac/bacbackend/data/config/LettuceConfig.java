@@ -7,20 +7,30 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
-    @Configuration
+/**
+ * Configuration for Lettuce, for handling Redis requests through the Spring framework.
+ */
+@Configuration
     @ComponentScan("com.bac.bacbackend")
     @EnableRedisRepositories (basePackages = "com.bac.bacbackend.data.repository")
     public class LettuceConfig {
 
-        @Bean
+    /**
+     * Currently redundant, as our implementations are of the CRUDRepository
+     * @return A template for interacting with Redis
+     */
+    @Bean
         public RedisTemplate<String, Object> redisTemplate() {
             RedisTemplate<String, Object> template = new RedisTemplate<>();
             template.setConnectionFactory(lettuceConnectionFactory());
             return template;
         }
 
-        @Bean
-        public LettuceConnectionFactory lettuceConnectionFactory() { return new LettuceConnectionFactory(); }
+    /**
+     * @return the factory method for connecting to Redis
+     */
+    @Bean
+    public LettuceConnectionFactory lettuceConnectionFactory() { return new LettuceConnectionFactory(); }
 
     }
 

@@ -9,12 +9,20 @@ import com.bac.bacbackend.domain.port.IChrome;
 import com.bac.bacbackend.domain.port.IFailedRepo;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import com.bac.bacbackend.domain.port.IWebSelectors;
-import com.bac.bacbackend.domain.service.scraper.scraping.ArticleScrapingStrategy;
-import com.bac.bacbackend.domain.service.scraper.scraping.SaveScrapedArticle;
-import com.bac.bacbackend.domain.service.scraper.scraping.Scraping;
-import com.bac.bacbackend.domain.service.scraper.scraping.ScrapingStrategy;
+import com.bac.bacbackend.domain.service.scraping.ArticleScrapingStrategy;
+import com.bac.bacbackend.domain.service.scraping.SaveScrapedArticle;
+import com.bac.bacbackend.domain.service.scraping.Scraping;
+import com.bac.bacbackend.domain.service.scraping.ScrapingStrategy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implementation of a Scraper. This implementation is a simple base controller that prioritizing instantiating objects
+ * inside the methods instead of relaying on dependency injection
+ * (similar to {@link com.bac.bacbackend.application.routine.crawling.NewsArticleCrawler}). Primarily done to combat
+ * muting the global variables by accident.
+ */
+@RequiredArgsConstructor
 @Component
 public class NewsArticleScraper implements Scraper {
     private final IWebSelectors webSelectors;
@@ -25,16 +33,14 @@ public class NewsArticleScraper implements Scraper {
     private final IFailedRepo failedRepo;
     private final SaveScrapedArticle saveScrapedArticle;
 
-    public NewsArticleScraper(IWebSelectors webSelectors, SummaryValidator summaryValidator, ContentAnalysis contentAnalysis, INewsParamRepo repository, IChrome browser, IFailedRepo failedRepo, SaveScrapedArticle saveScrapedArticle) {
-        this.webSelectors = webSelectors;
-        this.summaryValidator = summaryValidator;
-        this.contentAnalysis = contentAnalysis;
-        this.repository = repository;
-        this.browser = browser;
-        this.failedRepo = failedRepo;
-        this.saveScrapedArticle = saveScrapedArticle;
-    }
-
+    /**
+     * This method instantiates all the components used for scraping. Uses the {@link ArticleScrapingStrategy}
+     * that mainly focuses on visiting each article in its own window, instead of everything in one bulk
+     * or under several tabs in Selenium.
+     *
+     * @param articleUrls received urls from the crawler that are to be scraped
+     * @param propertyIndex the given index we are on in the iteration, decides which property to pick
+     */
     @Override
     public void scrapeWebsite(ArticleUrls articleUrls, int propertyIndex) {
         ScrapingProperties scrapingProperties = repository.select(propertyIndex);
@@ -44,25 +50,5 @@ public class NewsArticleScraper implements Scraper {
 
         scraping.scrape(scrapeContext);
     }
-
-    // TEST
-//    public void scrapeWebsite(ArticleUrls articleUrls, int propertyIndex) {
-//        ScrapingProperties scrapingProperties = new ScrapingProperties(
-//                "https://www.france24.com/en/europe/",
-//                ".article__title a",
-//                "href",
-//                ".m-item-list-article__wrapper picture",
-//                "innerHTML",
-//                "h1",
-//                "p.t-content__chapo"
-//        );
-//        ScrapeContext scrapeContext = new ScrapeContext(articleUrls, scrapingProperties);
-//        ScrapingStrategy scrapingStrategy = new ArticleScrapingStrategy(webSelectors, summaryValidator, contentAnalysis);
-//        Scraping scraping = new Scraping(browser, scrapingStrategy, failedRepo, saveScrapedArticle);
-//
-//        scraping.scrape(scrapeContext);
-//    }
-
-
-    }
+}
 

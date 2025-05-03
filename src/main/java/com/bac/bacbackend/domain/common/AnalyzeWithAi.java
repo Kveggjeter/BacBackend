@@ -5,24 +5,22 @@ import com.bac.bacbackend.domain.common.exceptions.RegexMatchResultException;
 import com.bac.bacbackend.domain.common.validators.Boundaries;
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.port.IOpenAi;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Component for analyzing scraped content using LLM and regex.
+ * Extends Regex to make free use of its methods.
  */
+@RequiredArgsConstructor
 @Component
 public class AnalyzeWithAi implements ContentAnalysis {
 
     private final IOpenAi openAi;
     private final ExtractInfoWithRegex extractInfoWithRegex;
     private static final String COMMAND = StringResource.COMMAND.getValue();
-
-    public AnalyzeWithAi(IOpenAi openAi, ExtractInfoWithRegex extractInfoWithRegex) {
-        this.openAi = openAi;
-        this.extractInfoWithRegex = extractInfoWithRegex;
-    }
 
     /**
      * Analyzes content of the scraped article using LLM and some simple Regex.

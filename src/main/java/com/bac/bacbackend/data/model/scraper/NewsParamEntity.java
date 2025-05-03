@@ -5,6 +5,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+/**
+ * Redis Entity class for webelement properties used for scraping.
+ */
 @Getter
 @Setter
 @RedisHash(value = "NewSource")

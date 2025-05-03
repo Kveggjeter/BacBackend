@@ -1,4 +1,4 @@
-package com.bac.bacbackend.domain.service.scraper.scraping;
+package com.bac.bacbackend.domain.service.scraping;
 
 import com.bac.bacbackend.domain.common.ContentAnalysis;
 import com.bac.bacbackend.domain.common.exceptions.AiPromptException;
@@ -6,6 +6,7 @@ import com.bac.bacbackend.domain.common.exceptions.RegexMatchResultException;
 import com.bac.bacbackend.domain.common.validators.SummaryValidator;
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.port.*;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.StaleElementReferenceException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -17,17 +18,12 @@ import java.util.NoSuchElementException;
  * The result we get from that then determines the rest of our values, like coordinates,
  * country, category and so forth.
  */
+@RequiredArgsConstructor
 public class ArticleScrapingStrategy implements ScrapingStrategy {
 
     private final IWebSelectors webSelectors;
     private final SummaryValidator summaryValidator;
     private final ContentAnalysis contentAnalysis;
-
-    public ArticleScrapingStrategy(IWebSelectors webSelectors, SummaryValidator summaryValidator, ContentAnalysis contentAnalysis) {
-        this.webSelectors = webSelectors;
-        this.summaryValidator = summaryValidator;
-        this.contentAnalysis = contentAnalysis;
-    }
 
     /**
      * Executing the scraping logic for the given {@link ScrapeContext}

@@ -1,92 +1,55 @@
 package com.bac.bacbackend.application;
 
-import com.bac.bacbackend.application.routine.BigScrape;
-import com.bac.bacbackend.application.routine.NewsPatrol;
-import com.bac.bacbackend.application.routine.crawling.NewsArticleCrawler;
-import com.bac.bacbackend.application.routine.scraping.NewsArticleScraper;
-import com.bac.bacbackend.domain.common.CheckCategoryByCountry;
-import com.bac.bacbackend.domain.common.MostPopularValue;
 import com.bac.bacbackend.domain.model.article.Article;
 import com.bac.bacbackend.domain.model.article.ArticleFacts;
-import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.port.IArticleRepo;
-import com.bac.bacbackend.domain.port.INewsParamRepo;
-import com.bac.bacbackend.domain.port.IScraperObjectRepo;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Rest controller that gives access to the web application to read news data.
+ * Crossorigin is used to ensure that only the given port/address can receive the data.
+ * Constructur is private to not be used anywhere else, as this is purely an endpoint controller.
+ */
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class Controller {
 
-    private final INewsParamRepo nRepo;
-    private final IArticleRepo aRepo;
-    private final IScraperObjectRepo sRepo;
-    private final BigScrape bot;
-    private final NewsPatrol newsPatrol;
-    private final NewsArticleCrawler newsArticleCrawler;
-    private final NewsArticleScraper newsArticleScraper;
+    private final IArticleRepo repo;
 
-    private Controller(NewsArticleCrawler newsArticleCrawler, NewsArticleScraper newsArticleScraper,  INewsParamRepo nRepo, IArticleRepo aRepo, IScraperObjectRepo sRepo, BigScrape bot, NewsPatrol newsPatrol) {
-        this.newsArticleCrawler = newsArticleCrawler;
-        this.newsArticleScraper = newsArticleScraper;
-        this.nRepo = nRepo;
-        this.aRepo = aRepo;
-        this.sRepo = sRepo;
-        this.bot = bot;
-        this.newsPatrol = newsPatrol;
+    /**
+     * Private constructor for dependency injection, instantiate the repository object.
+     * @param repo repository interface used for queries
+     */
+    private Controller(IArticleRepo repo) {
+        this.repo = repo;
     }
 
-    @RequestMapping("/start")
-        public String scrape() {
-            bot.start(nRepo.sumOfAllSources(), 30);
-            return "Skraping starta";
-    }
-
-    @RequestMapping("/cache")
-    public String cache() {
-        sRepo.cache();
-        return "Cache started";
-    }
-
-    @RequestMapping("/crawl")
-    public List<ArticleUrls> crawl(){
-        return newsArticleCrawler.crawlWebsites(5, nRepo.sumOfAllSources());
-
-    }
-
-    @RequestMapping("scrapeTest")
-    public void scrapeTest() {
-        ArticleUrls urls = new ArticleUrls("https://www.france24.com/en/americas/20250429-amazon-says-it-will-not-show-tariff-costs-goods-white-house-rebuke-trump", "<source type=\"image/webp\" srcset=\"https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:177/p:16x9/000_43WH3PT.webp 177w,https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:388/p:16x9/000_43WH3PT.webp 388w,https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:480/p:16x9/000_43WH3PT.webp 480w,https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:720/p:16x9/000_43WH3PT.webp 720w\" sizes=\"(max-width: 639px) calc(100vw - 32px), (max-width: 1076px) calc(50vw - 64px), 322px\">\n" +
-                "        <img fetchpriority=\"low\" src=\"https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:720/p:16x9/000_43WH3PT.jpg\" alt=\"White House Press Secretary Karoline Leavitt holds a news article on Amazon CEO Jeff Bezos as she speaks to reporters in Washington DC, on April 29, 2025.\" srcset=\"https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:177/p:16x9/000_43WH3PT.jpg 177w,https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:388/p:16x9/000_43WH3PT.jpg 388w,https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:480/p:16x9/000_43WH3PT.jpg 480w,https://s.france24.com/media/display/c4e545a2-251a-11f0-b02c-005056a90284/w:720/p:16x9/000_43WH3PT.jpg 720w\" sizes=\"(max-width: 639px) calc(100vw - 32px), (max-width: 1076px) calc(50vw - 64px), 322px\" width=\"720\" height=\"405\" loading=\"lazy\" class=\"m-figure__img lazy\" data-ll-status=\"native\">");
-        newsArticleScraper.scrapeWebsite(urls, nRepo.sumOfAllSources());
-    }
-
+    /**
+     * This method is for querying information about a given country. Iterates through
+     * the articles saved and makes fetches out the relevant information that matches with "country".
+     * It's a little forced to be O(n) since Redis don't have the same indexing possibilities as other databases.
+     * It does not matter performance wise, as the data is seldom big.
+     *
+     * @param country the given country the receiver want info about
+     * @return a JSON containing information about the country in question
+     */
     @RequestMapping("/country")
-    public ArticleFacts country(@RequestParam String country) {
-        Iterable<Article> articles = aRepo.news();
+    private ArticleFacts country(@RequestParam String country) {
+        Iterable<Article> articles = repo.news();
         return ArticleFacts.getArticleFacts(country, articles);
     }
 
-
+    /**
+     * Fetching all the news to be placed on the web-application.
+     *
+     * @return a JSON containing all the news that are saved in the db
+     */
     @RequestMapping("/news")
-    public List<Article> getNews() {
-        return aRepo.news();
+    private List<Article> getNews() {
+        return repo.news();
     }
-
-    @RequestMapping("/spy")
-    public void spyBot() {
-        newsPatrol.start(nRepo.sumOfAllSources());
-    }
-
-    @RequestMapping("/testCrawl")
-        public List<ArticleUrls> testCrawl() {
-            return newsArticleCrawler.crawlWebsites(2, nRepo.sumOfAllSources());
-        }
 }
