@@ -4,7 +4,10 @@ import com.bac.bacbackend.application.routine.BigScrape;
 import com.bac.bacbackend.application.routine.NewsPatrol;
 import com.bac.bacbackend.application.routine.crawling.NewsArticleCrawler;
 import com.bac.bacbackend.application.routine.scraping.NewsArticleScraper;
+import com.bac.bacbackend.domain.common.CheckCategoryByCountry;
+import com.bac.bacbackend.domain.common.MostPopularValue;
 import com.bac.bacbackend.domain.model.article.Article;
+import com.bac.bacbackend.domain.model.article.ArticleFacts;
 import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.port.IArticleRepo;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -65,17 +69,11 @@ public class Controller {
     }
 
     @RequestMapping("/country")
-    public int country(@RequestParam String country) {
-        int count = 0;
+    public ArticleFacts country(@RequestParam String country) {
         Iterable<Article> articles = aRepo.news();
-        for (Article article : articles) {
-            if (article != null
-                    && article.country() != null
-                    && article.country().equalsIgnoreCase(country))
-                count++;
-        }
-        return count;
+        return ArticleFacts.getArticleFacts(country, articles);
     }
+
 
     @RequestMapping("/news")
     public List<Article> getNews() {
