@@ -27,7 +27,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
         }
 
     /**
-     * @return the factory method for connecting to Redis
+     * @return the factory method for connecting to edis
      */
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() { return new LettuceConnectionFactory(); }
