@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.UUID;
 
 /**
  * Final child class of BrowserInstance. Implements Browser to be used in the data layer, and IChrome to be used
@@ -35,7 +36,8 @@ public final class Chrome extends BrowserInstance implements Browser, IChrome {
     public WebDriver create() {
         ChromeOptions options = new ChromeOptions();
         if (props.headless()) options.addArguments("--headless=old");
-        options.addArguments("--user-data-dir=/tmp/chrome-user-data");
+        String uniqueUserDataDir = "/tmp/chrome-user-data-" + UUID.randomUUID();
+        options.addArguments("--user-data-dir=" + uniqueUserDataDir);
         options.addArguments("--no-sandbox");
         options.addArguments("user-agent=" + props.alias());
 
