@@ -38,6 +38,7 @@ public final class Chrome extends BrowserInstance implements Browser, IChrome {
         if (props.headless()) options.addArguments("--headless=old");
         String uniqueUserDataDir = "/tmp/chrome-user-data-" + UUID.randomUUID();
         options.addArguments("--user-data-dir=" + uniqueUserDataDir);
+        options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
         options.addArguments("user-agent=" + props.alias());
 
