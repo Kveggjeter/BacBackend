@@ -34,7 +34,7 @@ public final class Chrome extends BrowserInstance implements Browser, IChrome {
     @Override
     public WebDriver create() {
         ChromeOptions options = new ChromeOptions();
-        if (props.headless()) options.addArguments("--headless");
+        if (props.headless()) options.addArguments("--headless=old");
         options.addArguments("--no-sandbox");
         options.addArguments("user-agent=" + props.alias());
 

@@ -26,7 +26,7 @@ public class TimedScraper {
     /**
      * Running the spy-bot every five minutes to ensure we always have updated news
      */
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     public void spy() { newsPatrol.start(repo.sumOfAllSources()); }
 
     /**
