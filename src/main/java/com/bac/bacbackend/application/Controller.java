@@ -14,7 +14,7 @@ import java.util.List;
  * Crossorigin is used to ensure that only the given port/address can receive the data.
  * Constructur is private to not be used anywhere else, as this is purely an endpoint controller.
  */
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://www.simplytidings.com/")
 @RestController
 public class Controller {
 
