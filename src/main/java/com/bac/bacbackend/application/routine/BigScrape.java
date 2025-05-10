@@ -2,7 +2,7 @@ package com.bac.bacbackend.application.routine;
 
 import com.bac.bacbackend.application.routine.crawling.WebCrawler;
 import com.bac.bacbackend.application.routine.scraping.Scraper;
-import com.bac.bacbackend.domain.port.IChrome;
+import com.bac.bacbackend.domain.port.IBrowser;
 import com.bac.bacbackend.domain.service.crawling.Crawler;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public final class BigScrape extends Bot {
      * @param crawler {@link Crawler}
      * @param browser {@link com.bac.bacbackend.data.repository.browser.Browser}
      */
-    public BigScrape(Scraper scraper, WebCrawler crawler, IChrome browser) {
+    public BigScrape(Scraper scraper, WebCrawler crawler, IBrowser browser) {
         super(scraper, crawler, browser);
     }
 

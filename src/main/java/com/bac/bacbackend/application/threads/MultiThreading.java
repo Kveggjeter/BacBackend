@@ -1,6 +1,6 @@
 package com.bac.bacbackend.application.threads;
 
-import com.bac.bacbackend.domain.port.IChrome;
+import com.bac.bacbackend.domain.port.IBrowser;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -14,13 +14,13 @@ import java.util.concurrent.TimeUnit;
 public abstract class MultiThreading {
 
     protected ExecutorService threadPool = null;
-    private final IChrome browser;
+    private final IBrowser browser;
 
     /**
      * Constructor for instancing the browser, that browser is meant to be inheritated by children classes
-     * @param browser {@link IChrome}
+     * @param browser {@link IBrowser}
      */
-    protected MultiThreading(IChrome browser) {
+    protected MultiThreading(IBrowser browser) {
         this.browser = browser;
     }
 

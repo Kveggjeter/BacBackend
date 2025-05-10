@@ -5,7 +5,7 @@ import com.bac.bacbackend.domain.common.validators.SummaryValidator;
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
 import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.model.scraper.ScrapingProperties;
-import com.bac.bacbackend.domain.port.IChrome;
+import com.bac.bacbackend.domain.port.IBrowser;
 import com.bac.bacbackend.domain.port.IFailedRepo;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import com.bac.bacbackend.domain.port.IWebSelectors;
@@ -29,7 +29,7 @@ public class NewsArticleScraper implements Scraper {
     private final SummaryValidator summaryValidator;
     private final ContentAnalysis contentAnalysis;
     private final INewsParamRepo repository;
-    private final IChrome browser;
+    private final IBrowser browser;
     private final IFailedRepo failedRepo;
     private final SaveScrapedArticle saveScrapedArticle;
 

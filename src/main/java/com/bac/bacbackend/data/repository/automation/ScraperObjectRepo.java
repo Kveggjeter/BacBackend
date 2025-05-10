@@ -39,15 +39,7 @@ public class ScraperObjectRepo {
      * @return the redis-friendly entity
      */
     private NewsParamEntity addSome(ScraperObjectEntity so) {
-        NewsParamEntity ns = new NewsParamEntity();
-        ns.setUrl(so.getUrl());
-        ns.setTxtLocator(so.getTxtLocator());
-        ns.setTxtHref(so.getTxtHref());
-        ns.setImgLocator(so.getImgLocator());
-        ns.setImgHref(so.getImgHref());
-        ns.setTitle(so.getTitle());
-        ns.setSum(so.getSum());
-        return ns;
+        return NewsParamEntity.fromPostgres(so);
     }
 
 }

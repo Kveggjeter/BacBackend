@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @param alias alias used for ID'ing itself when scraping
  */
 @ConfigurationProperties(prefix = "browser.chrome")
-public record ChromeBrowser(
+public record BrowserProperties(
 
         String driverPath,
         boolean headless,

@@ -1,7 +1,7 @@
 package com.bac.bacbackend.domain.service.crawling;
 
 import com.bac.bacbackend.domain.model.scraper.ScrapingProperties;
-import com.bac.bacbackend.domain.port.IChrome;
+import com.bac.bacbackend.domain.port.IBrowser;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class Crawler<T> {
-    private final IChrome browser;
+    private final IBrowser browser;
     private final CrawlingStrategy<T> crawlingStrategy;
 
     /**

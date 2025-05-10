@@ -17,7 +17,7 @@ import java.time.Instant;
 public class UpdateScraperProperties {
     private final JdbcTemplate jdbcTemplate;
     private final ScraperObjectRepo scraperObjectRepo;
-    private Instant lastUpdate = Instant.EPOCH;
+    private static Instant lastUpdate = Instant.EPOCH;
 
     /**
      * Change preferred scheduled rate with changing the fixedRate annotation (time is in m/s, 5000 = 5 seconds)

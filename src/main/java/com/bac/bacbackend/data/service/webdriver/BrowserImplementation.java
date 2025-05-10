@@ -1,19 +1,15 @@
 package com.bac.bacbackend.data.service.webdriver;
 
-import com.bac.bacbackend.data.model.browser.ChromeBrowser;
+import com.bac.bacbackend.data.model.browser.BrowserProperties;
 import com.bac.bacbackend.data.repository.browser.Browser;
-import com.bac.bacbackend.domain.port.IChrome;
+import com.bac.bacbackend.domain.port.IBrowser;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Component;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
 
 /**
  * Final child class of BrowserInstance. Implements Browser to be used in the data layer, and IChrome to be used
@@ -21,9 +17,9 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Component
-public final class Chrome extends BrowserInstance implements Browser, IChrome {
+public final class BrowserImplementation extends BrowserInstance implements Browser, IBrowser {
 
-    private final ChromeBrowser props;
+    private final BrowserProperties props;
 
     /**
      * Creates an instance of Google Chrome as headless. Uses given properties to camouflage itself {@code props}.
