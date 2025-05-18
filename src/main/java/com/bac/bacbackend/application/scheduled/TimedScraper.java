@@ -15,13 +15,18 @@ import org.springframework.stereotype.Component;
  * Translator to save some time
  * https://crontab.guru/
  */
-@RequiredArgsConstructor
 @Component
 @Slf4j
 public class TimedScraper {
     private final INewsParamRepo repo;
     private final BigScrape bigScrape;
     private final NewsPatrol newsPatrol;
+
+    public TimedScraper(INewsParamRepo repo, BigScrape bigScrape, NewsPatrol patrol) {
+        this.repo = repo;
+        this.bigScrape = bigScrape;
+        this.newsPatrol = patrol;
+    }
 
     /**
      * Running the spy-bot every five minutes to ensure we always have updated news

@@ -16,8 +16,6 @@ import org.springframework.data.redis.core.RedisHash;
  * 48h = 172800
  * 72h = 259200
  */
-@Getter
-@Setter
 @RedisHash(value = "Failed", timeToLive = 172800)
 public class FailedEntity {
 
@@ -25,4 +23,7 @@ public class FailedEntity {
     private String url;
 
     public FailedEntity() {}
+
+    public String getUrl() {return url;}
+    public void setUrl(String url) {this.url = url;}
 }

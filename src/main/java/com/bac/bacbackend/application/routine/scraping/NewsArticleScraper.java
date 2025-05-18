@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
  * (similar to {@link com.bac.bacbackend.application.routine.crawling.NewsArticleCrawler}). Primarily done to combat
  * muting the global variables by accident.
  */
-@RequiredArgsConstructor
 @Component
 public class NewsArticleScraper implements Scraper {
     private final IWebSelectors webSelectors;
@@ -32,6 +31,23 @@ public class NewsArticleScraper implements Scraper {
     private final IBrowser browser;
     private final IFailedRepo failedRepo;
     private final SaveScrapedArticle saveScrapedArticle;
+
+    public NewsArticleScraper(IWebSelectors webSelectors,
+                              SummaryValidator summaryValidator,
+                              ContentAnalysis contentAnalysis,
+                              INewsParamRepo repository,
+                              IBrowser browser,
+                              IFailedRepo failedRepo,
+                              SaveScrapedArticle saveScrapedArticle
+                              ){
+        this.webSelectors = webSelectors;
+        this.summaryValidator = summaryValidator;
+        this.contentAnalysis = contentAnalysis;
+        this.repository = repository;
+        this.browser = browser;
+        this.failedRepo = failedRepo;
+        this.saveScrapedArticle = saveScrapedArticle;
+    }
 
     /**
      * This method instantiates all the components used for scraping. Uses the {@link ArticleScrapingStrategy}

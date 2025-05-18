@@ -9,7 +9,6 @@ import com.bac.bacbackend.domain.port.IWebSelectors;
 import com.bac.bacbackend.domain.service.crawling.ArticleUrlStrategy;
 import com.bac.bacbackend.domain.service.crawling.Crawler;
 import com.bac.bacbackend.domain.service.crawling.CrawlingStrategy;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
@@ -18,13 +17,19 @@ import java.util.List;
  * is made as a new object, instead of dependency injection. This is to ensure that the global variables they share
  * and need stay the same and are not muted by accident.
  */
-@RequiredArgsConstructor
 @Component
 public class NewsArticleCrawler implements WebCrawler {
     private final IWebSelectors webSelectors;
     private final IBrowser browser;
     private final INewsParamRepo repository;
     private final ArticleUrlValidator articleUrlValidator;
+
+    public NewsArticleCrawler(IWebSelectors webSelectors, IBrowser browser, INewsParamRepo repository, ArticleUrlValidator articleUrlValidator) {
+        this.webSelectors = webSelectors;
+        this.browser = browser;
+        this.repository = repository;
+        this.articleUrlValidator = articleUrlValidator;
+    }
 
     /**
      * This method instantiates all the components needed for crawling. Uses the {@link ArticleUrlStrategy}

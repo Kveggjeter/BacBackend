@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
  * the {@link IArticleRepo} interface
  */
 @Component
-@RequiredArgsConstructor
 public class SaveScrapedArticle {
 
     private final IArticleRepo repository;
+
+    public SaveScrapedArticle(IArticleRepo repository) {
+        this.repository = repository;
+    }
 
     /**
      * Simply echo-method for saving

@@ -11,10 +11,10 @@ C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacb
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\application\threads\MultiThreading.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\config\AsyncConfig.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\config\BrowserConfig.java
-C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\config\RepositoryConfig.java
+C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\config\LettuceConfig.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\model\article\ArticleEntity.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\model\article\FailedEntity.java
-C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\model\browser\ChromeBrowser.java
+C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\model\browser\BrowserProperties.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\model\scraper\NewsParamEntity.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\model\scraper\ScraperObjectEntity.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\article\ArticleDataRepo.java
@@ -29,8 +29,8 @@ C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacb
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\scraper\NewsParamDataRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\scraper\NewsParamRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\service\decomp\OpenAi.java
+C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\service\webdriver\BrowserImplementation.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\service\webdriver\BrowserInstance.java
-C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\service\webdriver\Chrome.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\service\webdriver\WebSelectors.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\common\AnalyzeWithAi.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\common\CheckCategoryByCountry.java
@@ -51,7 +51,7 @@ C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacb
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\model\scraper\ArticleUrls.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\model\scraper\ScrapingProperties.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\port\IArticleRepo.java
-C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\port\IChrome.java
+C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\port\IBrowser.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\port\IFailedRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\port\INewsParamRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\domain\port\IOpenAi.java

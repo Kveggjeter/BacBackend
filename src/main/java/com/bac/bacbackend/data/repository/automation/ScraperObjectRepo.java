@@ -13,11 +13,16 @@ import java.util.List;
  * application.
  */
 @Component
-@RequiredArgsConstructor
 public class ScraperObjectRepo {
 
     private final ScraperDataObjectRepo scrapeRepo;
     private final NewsParamDataRepo newRepo;
+
+    public ScraperObjectRepo(ScraperDataObjectRepo scrapeRepo,
+                             NewsParamDataRepo newRepo) {
+        this.scrapeRepo = scrapeRepo;
+        this.newRepo = newRepo;
+    }
 
     /**
      * Protected method only to be used by {@link UpdateScraperProperties} in this package.

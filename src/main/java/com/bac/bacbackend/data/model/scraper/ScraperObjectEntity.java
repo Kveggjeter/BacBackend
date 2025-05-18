@@ -11,8 +11,6 @@ import lombok.Setter;
 /**
  * Postgres entity for the news sources
  */
-@Getter
-@Setter
 @Data
 @Entity
 @Table(name = "scraper_objects")
@@ -35,5 +33,14 @@ public class ScraperObjectEntity {
     private String sum;
 
     public ScraperObjectEntity() {}
+
+    public String getUrl() {return url;}
+    public void setUrl(String url) {this.url = url;}
+    public String getTxtLocator() {return txtLocator;}
+    public String getTxtHref() {return txtHref;}
+    public String getImgLocator() {return imgLocator;}
+    public String getImgHref() {return imgHref;}
+    public String getTitle() {return title;}
+    public String getSum() {return sum;}
 
 }

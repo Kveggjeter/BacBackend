@@ -36,7 +36,7 @@ public class NewsParamEntity {
         this.sum = sum;
     }
 
-    public ScrapingProperties toDomain(NewsParamEntity entity) {
+    public ScrapingProperties toDomain() {
         return new ScrapingProperties(
                 url, txtLocator, txtHref, imgLocator, imgHref, title, sum
         );

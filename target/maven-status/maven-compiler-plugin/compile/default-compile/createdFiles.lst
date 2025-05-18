@@ -2,7 +2,7 @@ com\bac\bacbackend\domain\common\MostPopularValue.class
 com\bac\bacbackend\data\model\scraper\NewsParamEntity.class
 com\bac\bacbackend\data\config\BrowserConfig.class
 com\bac\bacbackend\domain\service\crawling\CrawlingStrategy.class
-com\bac\bacbackend\data\model\browser\ChromeBrowser.class
+com\bac\bacbackend\data\service\webdriver\BrowserImplementation.class
 com\bac\bacbackend\domain\common\ContentAnalysis.class
 com\bac\bacbackend\domain\common\AnalyzeWithAi.class
 com\bac\bacbackend\application\routine\crawling\WebCrawler.class
@@ -18,7 +18,6 @@ com\bac\bacbackend\domain\service\crawling\Crawler.class
 com\bac\bacbackend\data\repository\automation\ScraperObjectRepo.class
 com\bac\bacbackend\domain\common\validators\SummaryValidator.class
 com\bac\bacbackend\domain\port\INewsParamRepo.class
-com\bac\bacbackend\data\service\webdriver\Chrome.class
 com\bac\bacbackend\domain\common\Regex.class
 com\bac\bacbackend\data\repository\article\FailedDataRepo.class
 com\bac\bacbackend\application\routine\BigScrape.class
@@ -26,6 +25,8 @@ com\bac\bacbackend\domain\service\scraping\SaveScrapedArticle.class
 com\bac\bacbackend\data\repository\automation\ScraperDataObjectRepo.class
 com\bac\bacbackend\domain\port\IArticleRepo.class
 com\bac\bacbackend\domain\service\scraping\Scraping.class
+com\bac\bacbackend\data\model\browser\BrowserProperties.class
+com\bac\bacbackend\domain\port\IBrowser.class
 com\bac\bacbackend\domain\model\scraper\ScrapingProperties.class
 com\bac\bacbackend\domain\common\validators\Boundaries.class
 com\bac\bacbackend\data\config\AsyncConfig.class
@@ -37,7 +38,6 @@ com\bac\bacbackend\data\repository\article\ArticleDataRepo.class
 com\bac\bacbackend\domain\common\exceptions\AiPromptException.class
 com\bac\bacbackend\domain\common\exceptions\RegexMatchResultException.class
 com\bac\bacbackend\domain\model\article\ArticleFacts.class
-com\bac\bacbackend\domain\port\IChrome.class
 com\bac\bacbackend\application\Controller.class
 com\bac\bacbackend\data\model\scraper\ScraperObjectEntity.class
 com\bac\bacbackend\domain\model\scraper\ArticleUrls.class
@@ -51,11 +51,11 @@ com\bac\bacbackend\data\service\webdriver\WebSelectors.class
 com\bac\bacbackend\domain\common\StringResource.class
 com\bac\bacbackend\Application.class
 com\bac\bacbackend\data\repository\automation\UpdateScraperProperties.class
-com\bac\bacbackend\data\config\RepositoryConfig.class
 com\bac\bacbackend\domain\port\IWebSelectors.class
 com\bac\bacbackend\application\threads\MultiThreading.class
 com\bac\bacbackend\data\repository\article\ArticleRepo.class
 com\bac\bacbackend\data\repository\scraper\NewsParamRepo.class
+com\bac\bacbackend\data\config\LettuceConfig.class
 com\bac\bacbackend\application\routine\Bot.class
 com\bac\bacbackend\domain\service\scraping\ArticleScrapingStrategy.class
 com\bac\bacbackend\domain\common\validators\CoordinateBoundaries.class

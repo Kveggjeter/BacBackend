@@ -1,6 +1,5 @@
 package com.bac.bacbackend.data.repository.automation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,11 +12,15 @@ import java.time.Instant;
  * because the application is mainly centered around using Redis as the primary database.
  */
 @Component
-@RequiredArgsConstructor
 public class UpdateScraperProperties {
     private final JdbcTemplate jdbcTemplate;
     private final ScraperObjectRepo scraperObjectRepo;
     private static Instant lastUpdate = Instant.EPOCH;
+
+    public UpdateScraperProperties(JdbcTemplate jdbcTemplate, ScraperObjectRepo scraperObjectRepo) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.scraperObjectRepo = scraperObjectRepo;
+    }
 
     /**
      * Change preferred scheduled rate with changing the fixedRate annotation (time is in m/s, 5000 = 5 seconds)

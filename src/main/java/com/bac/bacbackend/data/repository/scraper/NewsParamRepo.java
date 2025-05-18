@@ -27,7 +27,7 @@ public class NewsParamRepo extends DataSourceHandler<NewsParamEntity, String> im
     @Override
     public ScrapingProperties select(int propertyIndex) {
         NewsParamEntity entity = get(propertyIndex);
-        return entity.toDomain(entity);
+        return entity.toDomain();
     }
 
     /**

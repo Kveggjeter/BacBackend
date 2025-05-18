@@ -7,11 +7,14 @@ import org.springframework.stereotype.Component;
 /**
  * Class for handling summary. Primarily to make sure it's not a null
  */
-@RequiredArgsConstructor
 @Component
 public class SummaryValidator {
 
     private final WebSelectors webSelectors;
+
+    public SummaryValidator(WebSelectors webSelectors) {
+        this.webSelectors = webSelectors;
+    }
 
     /**
      * Does some nullchecks, a retry in case something unexpected happens. If the summary is longer than 400 characters,
