@@ -6,6 +6,7 @@ import com.bac.bacbackend.application.threads.MultiThreading;
 import com.bac.bacbackend.domain.model.scraper.ArticleUrls;
 import com.bac.bacbackend.domain.port.IBrowser;
 import com.bac.bacbackend.domain.service.crawling.Crawler;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Base class for bot-controllers. All bots collects and saves data to later be saved as an Article.
  * Therefor all bots uses the same initialization and benefit from having one common parent.
  */
+@Component
 public abstract class Bot extends MultiThreading {
 
     private final Scraper scraper;
