@@ -37,9 +37,16 @@ public final class BrowserImplementation extends BrowserInstance implements Brow
     public WebDriver create() {
         FirefoxOptions options = new FirefoxOptions();
         if (props.headless()) options.addArguments("--headless");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
         options.addArguments("user-agent=" + props.alias());
 
-        return new FirefoxDriver(options);
+        try {
+            return new RemoteWebDriver(new URL(props.driverPath()), options);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Bad Selenium URL: " + props.driverPath(), e);
+        }
     }
 
     /**

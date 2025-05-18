@@ -4,6 +4,7 @@ import com.bac.bacbackend.application.routine.BigScrape;
 import com.bac.bacbackend.application.routine.NewsPatrol;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,14 +30,14 @@ public class TimedScraper {
     /**
      * Running the spy-bot every five minutes to ensure we always have updated news
      */
-//    @Scheduled(cron = "* * * * * *")
-//    public void spy() { newsPatrol.start(repo.sumOfAllSources()); }
+    @Scheduled(cron = "0 */5 * * * *")
+    public void spy() { newsPatrol.start(repo.sumOfAllSources()); }
 
     /**
      * Running a bigger scrape every six hours. Might reduce this and add a check.
      */
-//    @Scheduled (cron = "0 0 0,6 * * *")
-//    public void scrape() {
-//        bigScrape.start(repo.sumOfAllSources(), 5);
-//    }
+    @Scheduled (cron = "0 0 0,6 * * *")
+    public void scrape() {
+        bigScrape.start(repo.sumOfAllSources(), 5);
+    }
 }
