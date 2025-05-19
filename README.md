@@ -4,7 +4,7 @@ Backend for Simply Tidings
 
 # Overview
 
-[Simply Tidings](https://www.simplytidings.com/) is a GIS for news, where the sources are scraped from various sources. 
+[Simply Tidings](https://www.simplytidings.com/) is a GIS for news, where newsarticles are scraped from various trusted sources like AP, Reuters and France24. 
 
 This is the backend of said GIS. It contains webcrawler logic and webscraping.
 
