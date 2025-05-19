@@ -37,7 +37,6 @@ public class TimedScraper {
     /**
      * BIG SCRAPE ONCE
      */
-    @PostConstruct
     public void scrape() {
         bigScrape.start(repo.sumOfAllSources(), 4);
     }

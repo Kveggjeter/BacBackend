@@ -1,5 +1,9 @@
 package com.bac.bacbackend.data.repository.automation;
 
+import com.bac.bacbackend.application.scheduled.TimedScraper;
+import jakarta.annotation.PostConstruct;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,10 +20,23 @@ public class UpdateScraperProperties {
     private final JdbcTemplate jdbcTemplate;
     private final ScraperObjectRepo scraperObjectRepo;
     private static Instant lastUpdate = Instant.EPOCH;
+    private final TimedScraper timedScraper;
 
-    public UpdateScraperProperties(JdbcTemplate jdbcTemplate, ScraperObjectRepo scraperObjectRepo) {
+    public UpdateScraperProperties(JdbcTemplate jdbcTemplate, ScraperObjectRepo scraperObjectRepo, TimedScraper timedScraper) {
         this.jdbcTemplate = jdbcTemplate;
         this.scraperObjectRepo = scraperObjectRepo;
+        this.timedScraper = timedScraper;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void init(){
+        checkForUpdates();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timedScraper.scrape();
     }
 
     /**
