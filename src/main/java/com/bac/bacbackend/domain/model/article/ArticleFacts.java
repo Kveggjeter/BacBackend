@@ -50,9 +50,12 @@ public record ArticleFacts(
         MostPopularValue mostPopularSource = new MostPopularValue();
 
         for (Article article : articles) {
+
             if (article != null
                     && article.country() != null
-                    && article.country().equalsIgnoreCase(country)) {
+                    && isItUs(article.country()).equalsIgnoreCase(country)
+            )
+            {
                 checkCategoryByCountry.countCategories(article.category().toLowerCase());
                 mostPopularCity.checkForMostPopularValue(article.city().toLowerCase());
                 mostPopularSource.checkForMostPopularValue(article.sourceName().toLowerCase());
@@ -66,5 +69,11 @@ public record ArticleFacts(
                 categoryCount.get("sports"), mostPopularCity.getKeyWithHighestValue(),
                 mostPopularSource.getKeyWithHighestValue()
         );
+    }
+    private static String isItUs(String country) {
+        switch (country.toLowerCase()) {
+            case "usa", "united states", "united-states", "us" -> { return "United States"; }
+            default -> { return country; }
+        }
     }
 }

@@ -27,25 +27,7 @@ public class NewsParamRepo extends DataSourceHandler<NewsParamEntity, String> im
     @Override
     public ScrapingProperties select(int propertyIndex) {
         NewsParamEntity entity = get(propertyIndex);
-        return toDomain(entity);
-    }
-
-    /**
-     * Converts entity class to domain class
-     *
-     * @param entity the entity for the news-parameters
-     * @return scraper properties usable to the domain
-     */
-    private ScrapingProperties toDomain(NewsParamEntity entity) {
-        return new ScrapingProperties(
-                entity.getUrl(),
-                entity.getTxtLocator(),
-                entity.getTxtHref(),
-                entity.getImgLocator(),
-                entity.getImgHref(),
-                entity.getTitle(),
-                entity.getSum()
-        );
+        return entity.toDomain();
     }
 
     /**

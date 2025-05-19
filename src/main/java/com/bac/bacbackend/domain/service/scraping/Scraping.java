@@ -1,23 +1,29 @@
 package com.bac.bacbackend.domain.service.scraping;
 
 import com.bac.bacbackend.domain.model.article.ScrapeContext;
-import com.bac.bacbackend.domain.port.IChrome;
+import com.bac.bacbackend.domain.port.IBrowser;
 import com.bac.bacbackend.domain.port.IFailedRepo;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Responsible for driving the scraping process for a single article
  * <p>
- * {@link IChrome} is an interface for the browser we use to automate our scraping with.
- * to change browser or setting, simply make an own implementation that implements {@link IChrome}
+ * {@link IBrowser} is an interface for the browser we use to automate our scraping with.
+ * to change browser or setting, simply make an own implementation that implements {@link IBrowser}
  */
-@RequiredArgsConstructor
 public class Scraping {
 
-    private final IChrome browser;
+    private final IBrowser browser;
     private final ScrapingStrategy scrapingStrategy;
     private final IFailedRepo failedRepo;
     private final SaveScrapedArticle saveScrapedArticle;
+
+    public Scraping(IBrowser browser, ScrapingStrategy scrapingStrategy, IFailedRepo failedRepo, SaveScrapedArticle saveScrapedArticle) {
+        this.browser = browser;
+        this.scrapingStrategy = scrapingStrategy;
+        this.failedRepo = failedRepo;
+        this.saveScrapedArticle = saveScrapedArticle;
+    }
 
     /**
      * Starts a webdriver session that closes after scraping is done. Adds articles

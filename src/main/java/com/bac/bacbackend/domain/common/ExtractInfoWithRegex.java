@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
  * Child class of Regex. Primarily functions as a controller and an exception thrower
  */
 @Component
-@RequiredArgsConstructor
 public class ExtractInfoWithRegex extends Regex {
 
     private final IWebSelectors webSelectors;
+
+    public ExtractInfoWithRegex(IWebSelectors webSelectors) {
+        this.webSelectors = webSelectors;
+    }
 
     /**
      * Controller for the base method, but helps to throw an unexpected exception upwards in the hierarchy

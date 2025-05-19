@@ -24,46 +24,12 @@ public class ArticleRepo extends DataSourceHandler<ArticleEntity, String> implem
 
     /**
      * Translating the domain article class to the entity class
-     * @param a article class from domain
+     * @param article article class from domain
      */
     @Override
-    public void adder(Article a) {
-        ArticleEntity e = new ArticleEntity();
-
-        e.setId(a.id());
-        e.setSourceName(a.sourceName());
-        e.setTitle(a.title());
-        e.setSummary(a.summary());
-        e.setCity(a.city());
-        e.setCountry(a.country());
-        e.setContinent(a.continent());
-        e.setCategory(a.category());
-        e.setX(a.x());
-        e.setY(a.y());
-        e.setImgUrl(a.imgUrl());
-
-        add(e);
-    }
-
-    /**
-     * Translating the entity article class to the domain class
-     * @param e the entity class that are to be transferred to domain
-     * @return aN article class used in the domain layer
-     */
-    private Article toDomain(ArticleEntity e) {
-        return new Article(
-                e.getId(),
-                e.getSourceName(),
-                e.getTitle(),
-                e.getSummary(),
-                e.getCity(),
-                e.getCountry(),
-                e.getContinent(),
-                e.getCategory(),
-                e.getX(),
-                e.getY(),
-                e.getImgUrl()
-        );
+    public void adder(Article article) {
+        ArticleEntity articleEntity = ArticleEntity.fromDomain(article);
+        add(articleEntity);
     }
 
     /**
@@ -88,7 +54,7 @@ public class ArticleRepo extends DataSourceHandler<ArticleEntity, String> implem
             if (entity == null) {
                 continue;
             }
-            articles.add(toDomain(entity));
+            articles.add(entity.toDomain());
         }
         return articles;
     }

@@ -12,11 +12,15 @@ import java.util.List;
  * An implementation of the crawling strategy.This strategy focuses on collecting a list of all available
  * articles at the given webpage. The urls are qualified by checking if it exists from before.
  */
-@RequiredArgsConstructor
 public class ArticleUrlStrategy implements CrawlingStrategy<ArticleUrls> {
 
     private final IWebSelectors webSelectors;
     private final ArticleUrlValidator articleUrlValidator;
+
+    public ArticleUrlStrategy(IWebSelectors webSelectors, ArticleUrlValidator articleUrlValidator) {
+        this.webSelectors = webSelectors;
+        this.articleUrlValidator = articleUrlValidator;
+    }
 
     /**
      * This method is used for extracting urls from a webpage. It collects both the thumbnail image (imgUlrs) and the

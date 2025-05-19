@@ -1,6 +1,8 @@
 package com.bac.bacbackend.data.repository.automation;
 
-import lombok.RequiredArgsConstructor;
+import com.bac.bacbackend.application.scheduled.TimedScraper;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,11 +15,28 @@ import java.time.Instant;
  * because the application is mainly centered around using Redis as the primary database.
  */
 @Component
-@RequiredArgsConstructor
 public class UpdateScraperProperties {
     private final JdbcTemplate jdbcTemplate;
     private final ScraperObjectRepo scraperObjectRepo;
-    private Instant lastUpdate = Instant.EPOCH;
+    private static Instant lastUpdate = Instant.EPOCH;
+    private final TimedScraper timedScraper;
+
+    public UpdateScraperProperties(JdbcTemplate jdbcTemplate, ScraperObjectRepo scraperObjectRepo, TimedScraper timedScraper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.scraperObjectRepo = scraperObjectRepo;
+        this.timedScraper = timedScraper;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void runningsMethodsAtStart() {
+        checkForUpdates();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            System.err.println("Not able to sleep:" + e.getMessage());
+        }
+        timedScraper.scrape();
+    }
 
     /**
      * Change preferred scheduled rate with changing the fixedRate annotation (time is in m/s, 5000 = 5 seconds)

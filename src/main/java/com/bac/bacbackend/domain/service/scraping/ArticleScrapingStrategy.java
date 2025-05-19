@@ -18,12 +18,17 @@ import java.util.NoSuchElementException;
  * The result we get from that then determines the rest of our values, like coordinates,
  * country, category and so forth.
  */
-@RequiredArgsConstructor
 public class ArticleScrapingStrategy implements ScrapingStrategy {
 
     private final IWebSelectors webSelectors;
     private final SummaryValidator summaryValidator;
     private final ContentAnalysis contentAnalysis;
+
+    public ArticleScrapingStrategy(IWebSelectors webSelectors, SummaryValidator summaryValidator, ContentAnalysis contentAnalysis) {
+        this.webSelectors = webSelectors;
+        this.summaryValidator = summaryValidator;
+        this.contentAnalysis = contentAnalysis;
+    }
 
     /**
      * Executing the scraping logic for the given {@link ScrapeContext}

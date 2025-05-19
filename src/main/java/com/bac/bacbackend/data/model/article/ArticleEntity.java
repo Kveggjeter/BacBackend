@@ -1,5 +1,6 @@
 package com.bac.bacbackend.data.model.article;
 
+import com.bac.bacbackend.domain.model.article.Article;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -36,6 +37,41 @@ public class ArticleEntity {
     private String y;
     private String imgUrl;
 
-    public ArticleEntity() {}
+    public ArticleEntity(String id, String sourceName, String title, String summary, String city, String country,
+                         String continent, String category, String x, String y, String imgUrl) {
+        this.id = id;
+        this.sourceName = sourceName;
+        this.title = title;
+        this.summary = summary;
+        this.city = city;
+        this.country = country;
+        this.continent = continent;
+        this.category = category;
+        this.x = x;
+        this.y = y;
+        this.imgUrl = imgUrl;
 
+    }
+
+    public Article toDomain() {
+        return new Article(
+                id, sourceName, title, summary, city, country, continent, category,
+                x, y, imgUrl
+        );
+    }
+
+    public static ArticleEntity fromDomain(Article article) {
+        return new ArticleEntity(
+                article.id(),
+                article.sourceName(),
+                article.title(),
+                article.summary(),
+                article.city(),
+                article.country(),
+                article.continent(),
+                article.category(),
+                article.x(),
+                article.y(),
+                article.imgUrl());
+    }
 }

@@ -38,14 +38,6 @@ public abstract class DataSourceHandler<T, ID> {
     }
 
     /**
-     * Fetching all from the given data class
-     * @return all from the given data class
-     */
-    protected List<T> get() {
-        return findAll();
-    }
-
-    /**
      * Overload method. Fetching one row based on the index given
      * @param index index for what data class to get
      * @return all that matches with the index
