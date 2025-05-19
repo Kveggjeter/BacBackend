@@ -1,6 +1,5 @@
 package com.bac.bacbackend.data.repository.automation;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -39,12 +38,4 @@ public class UpdateScraperProperties {
         }
     }
 
-    /**
-     * ONLY FOR SHOWCASING LOCALLY WITH DOCKER-COMPOSE. DOES NOT EXIST ANYWHERE ELSE.
-     */
-    @PostConstruct
-    public void createTableIfNotExists() {
-        String sql = CreateTable.CREATE_TABLE.getSql();
-        jdbcTemplate.execute(sql);
-    }
 }
