@@ -15,11 +15,14 @@ import java.net.URL;
  * Final child class of BrowserInstance. Implements Browser to be used in the data layer, and IChrome to be used
  * in the domain and forward.
  */
-@RequiredArgsConstructor
 @Component
 public final class BrowserImplementation extends BrowserInstance implements Browser, IBrowser {
 
     private final BrowserProperties props;
+
+    public BrowserImplementation(BrowserProperties props) {
+        this.props = props;
+    }
 
     /**
      * Creates an instance of firefox as headless. Uses given properties to camouflage itself {@code props}.

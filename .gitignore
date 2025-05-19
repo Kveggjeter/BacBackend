@@ -1,6 +1,5 @@
 HELP.md
 docker-compose.yml
-target
 ### STS ###
 .apt_generated
 .classpath

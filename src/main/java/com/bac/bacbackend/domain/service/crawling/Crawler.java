@@ -10,10 +10,15 @@ import java.util.List;
  * object used as the type in the list.
  * @param <T> The dataclass used for saving articles. Change out with preferred data class
  */
-@RequiredArgsConstructor
+
 public class Crawler<T> {
     private final IBrowser browser;
     private final CrawlingStrategy<T> crawlingStrategy;
+
+    public Crawler(IBrowser browser, CrawlingStrategy<T> crawlingStrategy) {
+        this.browser = browser;
+        this.crawlingStrategy = crawlingStrategy;
+    }
 
     /**
      * Generic method used by all crawlers, all crawler need a max amount of urls to crawl and
