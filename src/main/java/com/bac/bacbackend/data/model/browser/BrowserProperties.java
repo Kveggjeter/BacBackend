@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @param headless deciding factor if the browser is to be headless or not
  * @param alias alias used for ID'ing itself when scraping
  */
-@ConfigurationProperties(prefix = "browser.imp")
+@ConfigurationProperties(prefix = "browser.chrome")
 public record BrowserProperties(
 
         String driverPath,
