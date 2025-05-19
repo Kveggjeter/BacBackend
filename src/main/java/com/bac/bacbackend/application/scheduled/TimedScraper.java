@@ -3,6 +3,7 @@ package com.bac.bacbackend.application.scheduled;
 import com.bac.bacbackend.application.routine.BigScrape;
 import com.bac.bacbackend.application.routine.NewsPatrol;
 import com.bac.bacbackend.domain.port.INewsParamRepo;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -34,9 +35,9 @@ public class TimedScraper {
     public void spy() { newsPatrol.start(repo.sumOfAllSources()); }
 
     /**
-     * Running a bigger scrape every six hours. Might reduce this and add a check.
+     * BIG SCRAPE ONCE
      */
-    @Scheduled (cron = "0 0 0,6 * * *")
+    @PostConstruct
     public void scrape() {
         bigScrape.start(repo.sumOfAllSources(), 4);
     }
