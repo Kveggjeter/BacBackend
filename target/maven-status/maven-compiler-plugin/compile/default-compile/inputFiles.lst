@@ -21,6 +21,7 @@ C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacb
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\article\ArticleRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\article\FailedDataRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\article\FailedRepo.java
+C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\automation\CreateTable.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\automation\ScraperDataObjectRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\automation\ScraperObjectRepo.java
 C:\Users\sundb\WebstormProjects\BacBackend\bacBackend\src\main\java\com\bac\bacbackend\data\repository\automation\UpdateScraperProperties.java

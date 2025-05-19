@@ -38,6 +38,6 @@ public class TimedScraper {
      */
     @Scheduled (cron = "0 0 0,6 * * *")
     public void scrape() {
-        bigScrape.start(repo.sumOfAllSources(), 5);
+        bigScrape.start(repo.sumOfAllSources(), 4);
     }
 }

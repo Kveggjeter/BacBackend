@@ -30,6 +30,7 @@ com\bac\bacbackend\domain\port\IBrowser.class
 com\bac\bacbackend\domain\model\scraper\ScrapingProperties.class
 com\bac\bacbackend\domain\common\validators\Boundaries.class
 com\bac\bacbackend\data\config\AsyncConfig.class
+com\bac\bacbackend\data\repository\automation\CreateTable.class
 com\bac\bacbackend\data\service\decomp\OpenAi.class
 com\bac\bacbackend\domain\common\ExtractInfoWithRegex.class
 com\bac\bacbackend\domain\service\scraping\ScrapingStrategy.class
