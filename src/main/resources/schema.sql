@@ -1,3 +1,4 @@
+DROP TRIGGER IF EXISTS trigger_set_updated_at ON scraper_objects;
 DROP FUNCTION IF EXISTs set_updated_at();
 
 CREATE FUNCTION set_updated_at() RETURNS TRIGGER AS '
